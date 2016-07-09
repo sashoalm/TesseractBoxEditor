@@ -237,48 +237,44 @@ ChildWidget::ChildWidget(QWidget* parent)
     readSettings();
 
     // Table toolbar
-    QPushButton* upButton = new QPushButton();
+    QToolButton* upButton = new QToolButton();
+    upButton->setText(QString("↑"));
     upButton->setToolTip(tr("Move row up"));
-    upButton->setMinimumSize(QSize(24, 24));
-    upButton->setMaximumSize(QSize(24, 24));
     connect(upButton, SIGNAL(clicked()), this, SLOT(moveUp()));
 
-    QPushButton* downButton = new QPushButton();
+    QToolButton* downButton = new QToolButton();
+    downButton->setText(QString("↓"));
     downButton->setToolTip(tr("Move row down"));
-    downButton->setMinimumSize(QSize(24, 24));
-    downButton->setMaximumSize(QSize(24, 24));
     connect(downButton, SIGNAL(clicked()), this, SLOT(moveDown()));
 
-    QPushButton* moveToButton = new QPushButton();
+    QToolButton* moveToButton = new QToolButton();
+    moveToButton->setText(tr("↗"));
     moveToButton->setToolTip(tr("Move row to position…"));
-    moveToButton->setMinimumSize(QSize(24, 24));
-    moveToButton->setMaximumSize(QSize(24, 24));
     connect(moveToButton, SIGNAL(clicked()), this, SLOT(moveTo()));
 
-    QPushButton* goToButton = new QPushButton();
+    QToolButton* goToButton = new QToolButton();
+    goToButton->setText("↴");
     goToButton->setToolTip(tr("Go to row…"));
-    goToButton->setMinimumSize(QSize(24, 24));
-    goToButton->setMaximumSize(QSize(24, 24));
     connect(goToButton, SIGNAL(clicked()), this, SLOT(goToRow()));
 
-    QPushButton* insertButton = new QPushButton();
+    QToolButton* insertButton = new QToolButton();
+    insertButton->setText("+");
     insertButton->setToolTip(tr("Insert symbol"));
-    insertButton->setMaximumSize(QSize(24, 24));
     connect(insertButton, SIGNAL(clicked()), this, SLOT(insertSymbol()));
 
-    QPushButton* joinButton = new QPushButton();
+    QToolButton* joinButton = new QToolButton();
+    joinButton->setText("Join");
     joinButton->setToolTip(tr("Join symbols"));
-    joinButton->setMaximumSize(QSize(24, 24));
     connect(joinButton, SIGNAL(clicked()), this, SLOT(joinSymbol()));
 
-    QPushButton* splitButton = new QPushButton();
+    QToolButton* splitButton = new QToolButton();
+    splitButton->setText("Split");
     splitButton->setToolTip(tr("Split symbol"));
-    splitButton->setMaximumSize(QSize(24, 24));
     connect(splitButton, SIGNAL(clicked()), this, SLOT(splitSymbol()));
 
-    QPushButton* removeButton = new QPushButton();
+    QToolButton* removeButton = new QToolButton();
+    removeButton->setText("-");
     removeButton->setToolTip(tr("Remove symbol"));
-    removeButton->setMaximumSize(QSize(24, 24));
     connect(removeButton, SIGNAL(clicked()), this, SLOT(deleteSymbol()));
 
     QHBoxLayout* movementLayout = new QHBoxLayout();
