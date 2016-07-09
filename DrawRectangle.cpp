@@ -20,7 +20,7 @@
 *
 **********************************************************************/
 
-#include "dialogs/DrawRectangle.h"
+#include "DrawRectangle.h"
 #include "ui_DrawRectangle.h"
 
 //http://qt.gitorious.org/qt-labs/qtspotify/blobs/b7b0ecae6f5ab815e941bd62c00b0f87d2810016/logindialog.cpp

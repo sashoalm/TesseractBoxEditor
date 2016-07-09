@@ -20,7 +20,7 @@
 *
 **********************************************************************/
 
-#include "dialogs/ShortCutsDialog.h"
+#include "ShortCutsDialog.h"
 
 ShortCutsDialog::ShortCutsDialog(QWidget* parent)
     : QDialog(parent)

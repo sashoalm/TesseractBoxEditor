@@ -23,7 +23,7 @@
 **********************************************************************/
 
 #include "MainWindow.h"
-#include "dialogs/ShortCutsDialog.h"
+#include "ShortCutsDialog.h"
 
 MainWindow::MainWindow()
 {

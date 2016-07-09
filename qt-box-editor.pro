@@ -6,43 +6,38 @@ DEPENDPATH += ./ \
     resource/images \
     resource
 
-INCLUDEPATH += ./ \
-    dialogs \
-    src/include \
-    src
-
 QT += network
 
 DEFINES += VERSION=\\\"$${VERSION}\\\"
 
 FORMS += \
-    dialogs/ShortCutDialog.ui \
-    dialogs/GetRowIDDialog.ui \
-    dialogs/SettingsDialog.ui \
-    dialogs/FindDialog.ui \
-    dialogs/DrawRectangle.ui
+    ShortCutDialog.ui \
+    GetRowIDDialog.ui \
+    SettingsDialog.ui \
+    FindDialog.ui \
+    DrawRectangle.ui
 
-SOURCES += src/main.cpp \
-    src/MainWindow.cpp \
-    src/ChildWidget.cpp \
-    src/DelegateEditors.cpp \
-    src/TessTools.cpp \
-    dialogs/SettingsDialog.cpp \
-    dialogs/GetRowIDDialog.cpp \
-    dialogs/ShortCutsDialog.cpp \
-    dialogs/FindDialog.cpp \
-    dialogs/DrawRectangle.cpp
+SOURCES += main.cpp \
+    MainWindow.cpp \
+    ChildWidget.cpp \
+    DelegateEditors.cpp \
+    TessTools.cpp \
+    SettingsDialog.cpp \
+    GetRowIDDialog.cpp \
+    ShortCutsDialog.cpp \
+    FindDialog.cpp \
+    DrawRectangle.cpp
 
-HEADERS += src/MainWindow.h \
-    src/ChildWidget.h \
-    src/Settings.h \
-    src/TessTools.h \
-    src/DelegateEditors.h \
-    dialogs/SettingsDialog.h \
-    dialogs/GetRowIDDialog.h \
-    dialogs/ShortCutsDialog.h \
-    dialogs/FindDialog.h \
-    dialogs/DrawRectangle.h
+HEADERS += MainWindow.h \
+    ChildWidget.h \
+    Settings.h \
+    TessTools.h \
+    DelegateEditors.h \
+    SettingsDialog.h \
+    GetRowIDDialog.h \
+    ShortCutsDialog.h \
+    FindDialog.h \
+    DrawRectangle.h
 
 RESOURCES = resources/application.qrc
 
