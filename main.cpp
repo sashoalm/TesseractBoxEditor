@@ -35,6 +35,16 @@ int main(int argc, char* argv[])
     app.setApplicationName("QT Box Editor");
     app.setWindowIcon(QIcon(":/icons/qbe.png"));
 
+    // For Qt4 there is this bug where Unicode string literals from the source
+    // code were displayed as garbage text. Turns out the codec for string
+    // literals was NULL, which caused Qt to treat them as Latin-1. The source
+    // files themselves are encoded as UTF-8, at least on Linux. But I think Qt
+    // Creator uses UTF-8 on Windows as well. It's Visual Studio that uses
+    // UTF-16.
+    if (!QTextCodec::codecForCStrings()) {
+        QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    }
+
 #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
 #endif
