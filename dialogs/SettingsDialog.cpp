@@ -27,7 +27,7 @@
 SettingsDialog::SettingsDialog(QWidget* parent, int tabIndex)
   : QDialog(parent) {
   setFixedSize(420, 370);
-  setWindowTitle(tr("%1 :: Settings...").arg(SETTING_APPLICATION));
+  setWindowTitle(tr("%1 :: Settings...").arg(QApplication::instance()->applicationName()));
 
   setupUi(this);
   initSettings();
@@ -94,8 +94,7 @@ void SettingsDialog::on_backgroundColorButton_clicked() {
 }
 
 void SettingsDialog::initSettings() {
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                       SETTING_ORGANIZATION, SETTING_APPLICATION);
+  QSettings settings;
   QString fontname = settings.value("GUI/Font").toString();
 
   if (fontname.isEmpty()) {
@@ -195,8 +194,7 @@ void SettingsDialog::initSettings() {
 }
 
 void SettingsDialog::saveSettings() {
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                     SETTING_ORGANIZATION, SETTING_APPLICATION);
+    QSettings settings;
 
   settings.setValue("GUI/Font", tableFont);
   settings.setValue("GUI/ImageFont", imageFont);
@@ -318,8 +316,7 @@ void SettingsDialog::initLangs() {
     cbLang->model()->sort(0);
 
     cbLang->setCurrentIndex(1);  // do not show empty combobox if there is lang
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                        SETTING_ORGANIZATION, SETTING_APPLICATION);
+    QSettings settings;
     if (settings.contains("Tesseract/Lang")) {
         int langindex = cbLang->findData(
               settings.value("Tesseract/Lang").toString());

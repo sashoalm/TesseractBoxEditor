@@ -60,7 +60,7 @@ MainWindow::MainWindow() {
   updateSaveAction();
   readSettings(true);
   setUnifiedTitleAndToolBarOnMac(true);
-  setWindowTitle(tr("%1 - v%2").arg(SETTING_APPLICATION).arg(VERSION));
+  setWindowTitle(tr("%1 - v%2").arg(QApplication::instance()->applicationName()).arg(VERSION));
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
@@ -79,8 +79,7 @@ ChildWidget* MainWindow::activeChild() {
 }
 
 void MainWindow::open() {
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                     SETTING_ORGANIZATION, SETTING_APPLICATION);
+  QSettings settings;
   // try to get path from settings
   QString last_path = settings.value("last_path").toString();
   QString filetype = "Image files (*.bmp *.png *.jpeg *.jpg *.tif *.tiff);;";
@@ -123,8 +122,7 @@ void MainWindow::addChild(const QString& imageFileName) {
       connect(child, SIGNAL(drawRectangleChoosen()), this, SLOT(updateCommandActions()));
       child->setZoomStatus();
       // save path of open image file
-      QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                         SETTING_ORGANIZATION, SETTING_APPLICATION);
+      QSettings settings;
       QString filePath = QFileInfo(imageFileName).absolutePath();
       settings.setValue("last_path", filePath);
 
@@ -148,8 +146,7 @@ void MainWindow::addChild(const QString& imageFileName) {
 }
 
 void MainWindow::updateRecentFileActions() {
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                     SETTING_ORGANIZATION, SETTING_APPLICATION);
+  QSettings settings;
   QStringList files = settings.value("recentFileList").toStringList();
 
   int numRecentFiles = qMin(files.size(), static_cast<int>(MaxRecentFiles));
@@ -243,8 +240,7 @@ void MainWindow::reLoadImg() {
 }
 
 void MainWindow::importPLSym() {
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                     SETTING_ORGANIZATION, SETTING_APPLICATION);
+  QSettings settings;
   // try to get path from settings
   QString last_path = settings.value("last_path").toString();
 
@@ -261,8 +257,7 @@ void MainWindow::importPLSym() {
 }
 
 void MainWindow::importTextSym() {
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                     SETTING_ORGANIZATION, SETTING_APPLICATION);
+  QSettings settings;
   // try to get path from settings
   QString last_path = settings.value("last_path").toString();
 
@@ -607,7 +602,7 @@ void MainWindow::shortCutList() {
 
 void MainWindow::about() {
   QString abouttext =
-    tr("<h1>%1 %3</h1>").arg(SETTING_APPLICATION).arg(VERSION);
+    tr("<h1>%1 %3</h1>").arg(QApplication::instance()->applicationName()).arg(VERSION);
 
   abouttext.append(tr("<p><a href=\"http://qt-project.org/\">QT</a> "));
   abouttext.append(tr("editor of tesseract-ocr box files</p>"));
@@ -1176,8 +1171,7 @@ void MainWindow::createStatusBar() {
 }
 
 void MainWindow::readSettings(bool init) {
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                     SETTING_ORGANIZATION, SETTING_APPLICATION);
+  QSettings settings;
 
   // run this section only durin initializaiton time
   if (init) {
@@ -1191,8 +1185,7 @@ void MainWindow::readSettings(bool init) {
 }
 
 void MainWindow::writeSettings() {
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                     SETTING_ORGANIZATION, SETTING_APPLICATION);
+  QSettings settings;
 
   settings.beginGroup("mainWindow");
   settings.setValue("geometry", saveGeometry());

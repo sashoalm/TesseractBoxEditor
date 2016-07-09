@@ -23,9 +23,6 @@
 #ifndef SRC_INCLUDE_SETTINGS_H_
 #define SRC_INCLUDE_SETTINGS_H_
 
-#define SETTING_ORGANIZATION "qt-box-editor"
-#define SETTING_APPLICATION "QT Box Editor"
-
 #define UPDATE_URL "https://raw.github.com/zdenop/qt-box-editor/master/CURRENT_VERSION"
 #define PROJECT_URL "http://github.com/zdenop/qt-box-editor"
 #define PROJECT_URL_NAME "github.com/zdenop/qt-box-editor"

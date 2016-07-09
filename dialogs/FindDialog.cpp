@@ -80,8 +80,7 @@ void FindDialog::findPrev() {
 }
 
 void FindDialog::changed_Mc(bool status) {
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                     SETTING_ORGANIZATION, SETTING_APPLICATION);
+  QSettings settings;
   settings.setValue("Find/MatchCase", status);
 }
 
@@ -110,8 +109,7 @@ void FindDialog::closeEvent(QCloseEvent* event) {
 }
 
 void FindDialog::getSettings() {
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                     SETTING_ORGANIZATION, SETTING_APPLICATION);
+  QSettings settings;
   if (settings.contains("Find/MatchCase"))
     checkBox_Mc->setChecked(settings.value("Find/MatchCase").toBool());
 
@@ -122,8 +120,7 @@ void FindDialog::getSettings() {
 }
 
 void FindDialog::writeGeometry() {
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                     SETTING_ORGANIZATION, SETTING_APPLICATION);
+  QSettings settings;
   settings.setValue("Find/Pos", pos());
   settings.setValue("Find/Size", size());
 }

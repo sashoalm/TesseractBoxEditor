@@ -265,8 +265,7 @@ QImage TessTools::GetThresholded(const QImage& qImage) {
 }
 
 QString TessTools::getDataPath() {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                       SETTING_ORGANIZATION, SETTING_APPLICATION);
+    QSettings settings;
     QString dataPath;
     if (settings.contains("Tesseract/DataPath")) {
       dataPath = settings.value("Tesseract/DataPath").toString();
@@ -275,8 +274,7 @@ QString TessTools::getDataPath() {
 }
 
 QString TessTools::getLang() {
-    QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                       SETTING_ORGANIZATION, SETTING_APPLICATION);
+    QSettings settings;
     QString lang;
     if (settings.contains("Tesseract/Lang")) {
         lang = settings.value("Tesseract/Lang").toString();

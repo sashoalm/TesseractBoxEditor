@@ -416,8 +416,7 @@ void ChildWidget::initTable() {
 void ChildWidget::readSettings() {
   if (DMESS > 10) qDebug() << Q_FUNC_INFO;
   // Font for table
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                     SETTING_ORGANIZATION, SETTING_APPLICATION);
+  QSettings settings;
   QFont tableFont = settings.value("GUI/Font").value<QFont>();
 
   if (tableFont.family().isEmpty()) {
@@ -636,7 +635,7 @@ bool ChildWidget::readToVector(QTextStream &boxdata) {
             box.removeFirst ();  // tess2image generate also box for spaces
     } else if (box.size() != 6) {
       qDebug() << "box:" << box;
-      QMessageBox::warning(this, SETTING_APPLICATION,
+      QMessageBox::warning(this, QApplication::instance()->applicationName(),
                            tr("File can not be loaded because of wrong "
                               "(non tesseract-ocr 3.02) box "
                               "file format at line '%1'! (box.size: %2)")
@@ -760,7 +759,7 @@ bool ChildWidget::loadBoxes(const QString& fileName) {
   QFile file(fileName);
 
   if (!file.open(QFile::ReadOnly | QFile::Text)) {
-    QMessageBox::warning(this, SETTING_APPLICATION,
+    QMessageBox::warning(this, QApplication::instance()->applicationName(),
                          tr("Cannot read file %1:\n%2.").arg(fileName).arg(
                            file.errorString()));
     return false;
@@ -817,7 +816,7 @@ void ChildWidget::slotfileChanged(const QString &fileName) {
             tr("Warning: File was modified..."),
             tr("File '%1' was modified outside of %2.\nReload it?\n\n" \
                "Warning: This operation can not be undone!")
-            .arg(fileName).arg(SETTING_APPLICATION),
+            .arg(fileName).arg(QApplication::instance()->applicationName()),
             QMessageBox::Yes |
             QMessageBox::No,
             QMessageBox::No)) {
@@ -886,7 +885,7 @@ bool ChildWidget::save(const QString& fileName) {
   if (!file.open(QFile::WriteOnly)) {
     QMessageBox::warning(
       this,
-      SETTING_APPLICATION,
+      QApplication::instance()->applicationName(),
       tr("Cannot write file %1:\n%2.").arg(fileName).arg(file.errorString()));
     return false;
   }
@@ -1019,7 +1018,7 @@ bool ChildWidget::saveString(const QString& fileName, const QString& qData) {
   if (!file.open(QFile::WriteOnly | QFile::Text)) {
     QMessageBox::warning(
       this,
-      SETTING_APPLICATION,
+      QApplication::instance()->applicationName(),
       tr("Cannot write file %1:\n%2.").arg(fileName).arg(file.errorString()));
     return false;
   }
@@ -1065,7 +1064,7 @@ bool ChildWidget::importSPLToChild(const QString& fileName) {
   QFile file(fileName);
 
   if (!file.open(QFile::ReadOnly | QFile::Text)) {
-    QMessageBox::warning(this, SETTING_APPLICATION,
+    QMessageBox::warning(this, QApplication::instance()->applicationName(),
                          tr("Cannot read file %1:\n%2.").arg(fileName).arg(
                            file.errorString()));
     return false;
@@ -1084,7 +1083,7 @@ bool ChildWidget::importSPLToChild(const QString& fileName) {
     line = in.readLine();
     if (!line.isEmpty()) {
       if (row > model->rowCount()) {
-        QMessageBox::warning(this, SETTING_APPLICATION,
+        QMessageBox::warning(this, QApplication::instance()->applicationName(),
                              tr("There are more symbols in import file than " \
                                 "boxes!\nRest of symbols are ignored."));
         file.close();
@@ -1097,7 +1096,7 @@ bool ChildWidget::importSPLToChild(const QString& fileName) {
   } while (!line.isEmpty());
 
   if (row < model->rowCount()) {
-    QMessageBox::warning(this, SETTING_APPLICATION,
+    QMessageBox::warning(this, QApplication::instance()->applicationName(),
                          tr("There are less symbols in import file than boxes!")
                          .arg(fileName).arg(file.errorString()));
   }
@@ -1116,12 +1115,11 @@ bool ChildWidget::importTextToChild(const QString& fileName) {
   if (DMESS > 10) qDebug() << Q_FUNC_INFO;
   // TODO(zdenop): code clean up, and join with importSPLToChild
 
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                     SETTING_ORGANIZATION, SETTING_APPLICATION);
+  QSettings settings;
 
   QFile file(fileName);
   if (!file.open(QFile::ReadOnly | QFile::Text)) {
-    QMessageBox::warning(this, SETTING_APPLICATION,
+    QMessageBox::warning(this, QApplication::instance()->applicationName(),
                          tr("Cannot read file %1:\n%2.").arg(fileName)
                          .arg(file.errorString()));
     return false;
@@ -1179,7 +1177,7 @@ bool ChildWidget::importTextToChild(const QString& fileName) {
     }
   }
   if (symbols.size() != model->rowCount()) {
-    QMessageBox::warning(this, SETTING_APPLICATION,
+    QMessageBox::warning(this, QApplication::instance()->applicationName(),
                          tr("Number of symbols in import file differ with " \
                             "number of boxes!"));
   }
@@ -1216,7 +1214,7 @@ bool ChildWidget::exportTxt(const int& eType, const QString& fileName) {
   if (!file.open(QFile::WriteOnly | QFile::Text)) {
     QMessageBox::warning(
       this,
-      SETTING_APPLICATION,
+      QApplication::instance()->applicationName(),
       tr("Cannot write file %1:\n%2.").arg(boxFile).arg(file.errorString()));
     return false;
   }
@@ -1224,8 +1222,7 @@ bool ChildWidget::exportTxt(const int& eType, const QString& fileName) {
   QTextStream out(&file);
   out.setCodec("UTF-8");
   QApplication::setOverrideCursor(Qt::WaitCursor);
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                     SETTING_ORGANIZATION, SETTING_APPLICATION);
+  QSettings settings;
   int line_start_prev = 0;
   int line_end_prev = 0;
   int right_prev = -1;
@@ -1481,8 +1478,7 @@ QImage ChildWidget::gItem2qImage(){
 
 void ChildWidget::setSelectionRect() {
   if (DMESS > 10) qDebug() << Q_FUNC_INFO;
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                     SETTING_ORGANIZATION, SETTING_APPLICATION);
+  QSettings settings;
   QFont imageFont = settings.value("GUI/ImageFont").value<QFont>();
 
   if (imageFont.family().isEmpty()) {
@@ -2544,7 +2540,7 @@ bool ChildWidget::maybeSave() {
   if (DMESS > 10) qDebug() << Q_FUNC_INFO;
   if (isModified()) {
     QMessageBox::StandardButton ret;
-    ret = QMessageBox::warning(this, SETTING_APPLICATION,
+    ret = QMessageBox::warning(this, QApplication::instance()->applicationName(),
                                tr("'%1' has been modified.\n"
                                   "Do you want to save your changes?").arg(
                                  userFriendlyCurrentFile()), QMessageBox::Save
@@ -2770,7 +2766,7 @@ void ChildWidget::undo() {
 
     QMessageBox::warning(
       this,
-      SETTING_APPLICATION,
+      QApplication::instance()->applicationName(),
       "Invalid undo operation.");
     break;
   }
@@ -3018,7 +3014,7 @@ void ChildWidget::redo() {
 
     QMessageBox::warning(
       this,
-      SETTING_APPLICATION,
+      QApplication::instance()->applicationName(),
       "Invalid redo operation.");
     break;
   }

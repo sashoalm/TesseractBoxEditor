@@ -32,8 +32,8 @@ int main(int argc, char* argv[]) {
   Q_INIT_RESOURCE(application);
 
   QApplication app(argc, argv);
-  app.setOrganizationName(SETTING_ORGANIZATION);
-  app.setApplicationName(SETTING_APPLICATION);
+  app.setOrganizationName("qt-box-editor");
+  app.setApplicationName("QT Box Editor");
   app.setWindowIcon(QIcon(":/icons/qbe.png"));
 
   #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
