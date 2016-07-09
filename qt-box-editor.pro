@@ -1,12 +1,14 @@
-TEMPLATE = app
+QT       += core gui network
+
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+
 VERSION = 1.13dev
 TARGET = qt-box-editor-$${VERSION}
+TEMPLATE = app
 
 DEPENDPATH += ./ \
     resource/images \
     resource
-
-QT += network
 
 DEFINES += VERSION=\\\"$${VERSION}\\\"
 
