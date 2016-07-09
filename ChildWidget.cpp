@@ -2323,8 +2323,6 @@ void ChildWidget::deleteSymbol()
     // This prevents deselecting dead rows in selectionChanged() on removeRow()
     selectionModel->clearSelection();
 
-    int rowstodelete = indexes.size();
-    int rownum = indexes.front().row();
     int afterRow = my_min(indexes.back().row() - indexes.size() + 1,
                           model->rowCount() - 1);
 
