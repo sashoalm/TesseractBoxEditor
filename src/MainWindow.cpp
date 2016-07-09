@@ -60,7 +60,6 @@ MainWindow::MainWindow() {
   updateSaveAction();
   readSettings(true);
   setUnifiedTitleAndToolBarOnMac(true);
-  setWindowIcon(QIcon(":/icons/qbe.png"));
   setWindowTitle(tr("%1 - v%2").arg(SETTING_APPLICATION).arg(VERSION));
 }
 

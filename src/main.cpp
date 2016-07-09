@@ -38,6 +38,7 @@ int main(int argc, char* argv[]) {
   QApplication app(argc, argv);
   app.setOrganizationName(SETTING_ORGANIZATION);
   app.setApplicationName(SETTING_APPLICATION);
+  app.setWindowIcon(QIcon(":/icons/qbe.png"));
 
   #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
