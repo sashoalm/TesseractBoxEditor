@@ -766,15 +766,13 @@ void MainWindow::updateViewMenu() {
 }
 
 void MainWindow::createActions() {
-  openAct = new QAction(QIcon::fromTheme("fileopen"),
-                        tr("&Open..."), this);
+  openAct = new QAction(tr("&Open..."), this);
   openAct->setShortcuts(QKeySequence::Open);
   openAct->setToolTip(tr("Open an existing file"));
   openAct->setStatusTip(tr("Open an existing file"));
   connect(openAct, SIGNAL(triggered()), this, SLOT(open()));
 
-  saveAct = new QAction(QIcon::fromTheme("filesave"),
-                        tr("&Save"), this);
+  saveAct = new QAction(tr("&Save"), this);
   saveAct->setShortcuts(QKeySequence::Save);
   saveAct->setToolTip(tr("Save the document to disk"));
   saveAct->setStatusTip(tr("Save the document to disk"));
@@ -792,8 +790,7 @@ void MainWindow::createActions() {
   connect(splitToFeatureBFAct, SIGNAL(triggered()), this,
           SLOT(splitToFeatureBF()));
 
-  saveAsAct = new QAction(QIcon::fromTheme("filesaveas"),
-                          tr("Save &As"), this);
+  saveAsAct = new QAction(tr("Save &As"), this);
   saveAsAct->setShortcut(tr("Ctrl+Shift+S"));
   saveAsAct->setToolTip(
     tr("Save document after prompting the user for a file name."));
@@ -823,8 +820,7 @@ void MainWindow::createActions() {
   importPLSymAct->setEnabled(false);
   connect(importPLSymAct, SIGNAL(triggered()), this, SLOT(importPLSym()));
 
-  importTextSymAct = new QAction(QIcon::fromTheme("fileimport"),
-                                 tr("Import &text file"), this);
+  importTextSymAct = new QAction(tr("Import &text file"), this);
   importTextSymAct->setToolTip(tr("Import symbols from text document"));
   importTextSymAct->setStatusTip(tr("Import symbols from text document"));
   importTextSymAct->setEnabled(false);
@@ -855,8 +851,7 @@ void MainWindow::createActions() {
   exportMapper->setMapping(paragraphPerLineAct, 3);
   connect(exportMapper, SIGNAL(mapped(int)), this, SLOT(exportToFile(int)));
 
-  closeAct = new QAction(QIcon::fromTheme("window-close"),
-                         tr("Cl&ose"), this);
+  closeAct = new QAction(tr("Cl&ose"), this);
   closeAct->setShortcut(QKeySequence::Close);
   closeAct->setToolTip(tr("Close the active tab"));
   closeAct->setStatusTip(tr("Close the active tab"));
@@ -871,172 +866,143 @@ void MainWindow::createActions() {
   separatorAct = new QAction(this);
   separatorAct->setSeparator(true);
 
-  exitAct = new QAction(QIcon::fromTheme("exit"),
-                        tr("E&xit"), this);
+  exitAct = new QAction(tr("E&xit"), this);
   exitAct->setShortcut(tr("Ctrl+Q"));
   exitAct->setToolTip(tr("Exit the application"));
   exitAct->setStatusTip(tr("Exit the application"));
   connect(exitAct, SIGNAL(triggered()), this, SLOT(close()));
 
-  boldAct = new QAction(QIcon::fromTheme("text_bold"),
-                        tr("&Bold"), this);
+  boldAct = new QAction(tr("&Bold"), this);
   boldAct->setShortcut(QKeySequence::Bold);
   boldAct->setCheckable(true);
   connect(boldAct, SIGNAL(triggered(bool)), this, SLOT(bold(bool)));
 
-  italicAct = new QAction(QIcon::fromTheme("text_italic"),
-                          tr("&Italic"), this);
+  italicAct = new QAction(tr("&Italic"), this);
   italicAct->setShortcut(QKeySequence::Italic);
   italicAct->setCheckable(true);
   connect(italicAct, SIGNAL(triggered(bool)), this, SLOT(italic(bool)));
 
-  underlineAct = new QAction(QIcon::fromTheme("text_under"),
-                             tr("&Underline"), this);
+  underlineAct = new QAction(tr("&Underline"), this);
   underlineAct->setShortcut(QKeySequence::Underline);
   underlineAct->setCheckable(true);
   connect(underlineAct, SIGNAL(triggered(bool)), this, SLOT(underline(bool)));
 
-  zoomInAct = new QAction(QIcon::fromTheme("zoom-in"),
-                          tr("Zoom &in"), this);
+  zoomInAct = new QAction(tr("Zoom &in"), this);
   zoomInAct->setShortcut(QKeySequence::ZoomIn);
   connect(zoomInAct, SIGNAL(triggered()), this, SLOT(zoomIn()));
 
-  zoomOutAct = new QAction(QIcon::fromTheme("zoom-out"),
-                           tr("Zoom &out"), this);
+  zoomOutAct = new QAction(tr("Zoom &out"), this);
   zoomOutAct->setShortcut(QKeySequence::ZoomOut);
   connect(zoomOutAct, SIGNAL(triggered()), this, SLOT(zoomOut()));
 
-  zoomOriginalAct = new QAction(QIcon::fromTheme("zoom-original"),
-                                tr("Zoom &1:1"), this);
+  zoomOriginalAct = new QAction(tr("Zoom &1:1"), this);
   zoomOriginalAct->setShortcut(tr("Ctrl+*"));
   connect(zoomOriginalAct, SIGNAL(triggered()), this, SLOT(zoomOriginal()));
 
-  zoomToFitAct = new QAction(QIcon::fromTheme("zoom-fit"),
-                             tr("Zoom to fit"), this);
+  zoomToFitAct = new QAction(tr("Zoom to fit"), this);
   zoomToFitAct->setShortcut(tr("Ctrl+."));
   connect(zoomToFitAct, SIGNAL(triggered()), this, SLOT(zoomToFit()));
 
-  zoomToHeightAct = new QAction(QIcon::fromTheme("zoom-height"),
-                                tr("Zoom to height"), this);
+  zoomToHeightAct = new QAction(tr("Zoom to height"), this);
   zoomToHeightAct->setShortcut(tr("Ctrl+>"));
   connect(zoomToHeightAct, SIGNAL(triggered()), this, SLOT(zoomToHeight()));
 
-  zoomToWidthAct = new QAction(QIcon::fromTheme("zoom-width"),
-                               tr("Zoom to width"), this);
+  zoomToWidthAct = new QAction(tr("Zoom to width"), this);
   zoomToWidthAct->setShortcut(tr("Ctrl+<"));
   connect(zoomToWidthAct, SIGNAL(triggered()), this, SLOT(zoomToWidth()));
 
-  zoomToSelectionAct = new QAction(QIcon::fromTheme("zoom-selection"),
-                                   tr("Zoom to selected box"), this);
+  zoomToSelectionAct = new QAction(tr("Zoom to selected box"), this);
   zoomToSelectionAct->setShortcut(tr("Ctrl+/"));
   connect(zoomToSelectionAct, SIGNAL(triggered()), this,
           SLOT(zoomToSelection()));
 
-  showSymbolAct = new QAction(QIcon::fromTheme("showSymbol"),
-                              tr("S&how symbol"), this);
+  showSymbolAct = new QAction(tr("S&how symbol"), this);
   showSymbolAct->setCheckable(true);
   showSymbolAct->setShortcut(tr("Ctrl+L"));
   showSymbolAct->setToolTip(tr("Show/hide symbol over selection rectangle"));
   showSymbolAct->setStatusTip(tr("Show/hide symbol over selection rectangle"));
   connect(showSymbolAct, SIGNAL(triggered()), this, SLOT(showSymbol()));
 
-  DirectTypingAct = new QAction(QIcon::fromTheme("key_bindings"),
-                                tr("&Direct type mode"), this);
+  DirectTypingAct = new QAction(tr("&Direct type mode"), this);
   DirectTypingAct->setCheckable(true);
   DirectTypingAct->setShortcut(tr("Ctrl+D"));
   connect(DirectTypingAct, SIGNAL(triggered(bool)), this,
           SLOT(directTypingMode(bool)));
 
-  showFontColumnsAct = new QAction(QIcon::fromTheme("fonts"),
-                                   tr("Show Font Columns"), this);
+  showFontColumnsAct = new QAction(tr("Show Font Columns"), this);
   showFontColumnsAct->setCheckable(true);
   connect(showFontColumnsAct, SIGNAL(triggered(bool)), this,
           SLOT(showFontColumns(bool)));
 
-  drawBoxesAct = new QAction(QIcon::fromTheme("drawRect"),
-                             tr("S&how boxes"), this);
+  drawBoxesAct = new QAction(tr("S&how boxes"), this);
   drawBoxesAct->setCheckable(true);
   drawBoxesAct->setShortcut(tr("Ctrl+H"));
   drawBoxesAct->setToolTip(tr("Show/hide rectangles for all boxes"));
   drawBoxesAct->setStatusTip(tr("Show/hide rectangles for all boxes"));
   connect(drawBoxesAct, SIGNAL(triggered()), this, SLOT(drawBoxes()));
 
-  nextAct = new QAction(QIcon::fromTheme("next"), tr("Ne&xt"), this);
+  nextAct = new QAction(tr("Ne&xt"), this);
   nextAct->setShortcuts(QKeySequence::NextChild);
   nextAct->setToolTip(tr("Move the focus to the next window"));
   nextAct->setStatusTip(tr("Move the focus to the next window"));
   connect(nextAct, SIGNAL(triggered()), this, SLOT(nextTab()));
 
-  previousAct = new QAction(QIcon::fromTheme("previous"),
-                            tr("Pre&vious"), this);
+  previousAct = new QAction(tr("Pre&vious"), this);
   previousAct->setShortcuts(QKeySequence::PreviousChild);
   previousAct->setToolTip(tr("Move the focus to the previous window"));
   previousAct->setStatusTip(tr("Move the focus to the previous window"));
   connect(previousAct, SIGNAL(triggered()), this, SLOT(previousTab()));
 
-  insertAct = new QAction(QIcon::fromTheme("insertRow"),
-                          tr("&Insert symbol"), this);
+  insertAct = new QAction(tr("&Insert symbol"), this);
   insertAct->setShortcut(Qt::Key_Insert);
   connect(insertAct, SIGNAL(triggered()), this, SLOT(insertSymbol()));
 
-  splitAct = new QAction(QIcon::fromTheme("splitRow"),
-                         tr("&Split symbol"), this);
+  splitAct = new QAction(tr("&Split symbol"), this);
   splitAct->setShortcut(tr("Ctrl+2"));
   connect(splitAct, SIGNAL(triggered()), this, SLOT(splitSymbol()));
 
-  joinAct = new QAction(QIcon::fromTheme("joinRow"),
-                        tr("&Join with Next Symbol"), this);
+  joinAct = new QAction(tr("&Join with Next Symbol"), this);
   joinAct->setShortcut(tr("Ctrl+1"));
   connect(joinAct, SIGNAL(triggered()), this, SLOT(joinSymbol()));
 
-  deleteAct = new QAction(QIcon::fromTheme("deleteRow"),
-                          tr("&Delete symbol"), this);
+  deleteAct = new QAction(tr("&Delete symbol"), this);
   deleteAct->setShortcut(QKeySequence::Delete);
   connect(deleteAct, SIGNAL(triggered()), this, SLOT(deleteSymbol()));
 
-  moveUpAct = new QAction(QIcon::fromTheme("up"),
-                          tr("Move row &up"), this);
+  moveUpAct = new QAction(tr("Move row &up"), this);
   moveUpAct->setShortcut(Qt::ALT | Qt::Key_Up);
   connect(moveUpAct, SIGNAL(triggered()), this, SLOT(moveUp()));
 
-  moveDownAct = new QAction(QIcon::fromTheme("down"),
-                            tr("Move row &down"), this);
+  moveDownAct = new QAction(tr("Move row &down"), this);
   moveDownAct->setShortcut(Qt::ALT | Qt::Key_Down);
   connect(moveDownAct, SIGNAL(triggered()), this, SLOT(moveDown()));
 
-  moveToAct = new QAction(QIcon::fromTheme("moveTo"),
-                          tr("&Move row to…"), this);
+  moveToAct = new QAction(tr("&Move row to…"), this);
   moveToAct->setShortcut(Qt::CTRL | Qt::Key_M);
   connect(moveToAct, SIGNAL(triggered()), this, SLOT(moveTo()));
 
-  goToRowAct = new QAction(QIcon::fromTheme("jump"),
-                           tr("&Go to row…"), this);
+  goToRowAct = new QAction(tr("&Go to row…"), this);
   goToRowAct->setShortcut(tr("Ctrl+G"));
   connect(goToRowAct, SIGNAL(triggered()), this, SLOT(goToRow()));
 
-  findAct = new QAction(QIcon::fromTheme("find"),
-                        tr("&Find…"), this);
+  findAct = new QAction(tr("&Find…"), this);
   findAct->setShortcut(tr("Ctrl+F"));
   connect(findAct, SIGNAL(triggered()), this, SLOT(find()));
 
-  drawRectAct = new QAction(QIcon::fromTheme("rectangle"),
-                            tr("Draw/Hide &Rectangle…"), this);
+  drawRectAct = new QAction(tr("Draw/Hide &Rectangle…"), this);
   drawRectAct->setCheckable(true);
   drawRectAct->setShortcut(tr("Ctrl+R"));
   connect(drawRectAct, SIGNAL(triggered(bool)), this, SLOT(drawRect(bool)));
 
-  undoAct = new QAction(QIcon::fromTheme("undo"),
-                        tr("&Undo"), this);
+  undoAct = new QAction(tr("&Undo"), this);
   undoAct->setShortcut(tr("Ctrl+Z"));
   connect(undoAct, SIGNAL(triggered()), this, SLOT(undo()));
 
-  redoAct = new QAction(QIcon::fromTheme("redo"),
-                        tr("&Redo"), this);
+  redoAct = new QAction(tr("&Redo"), this);
   redoAct->setShortcut(tr("Ctrl+Y"));
   connect(redoAct, SIGNAL(triggered()), this, SLOT(redo()));
 
-  settingsAct = new QAction(QIcon::fromTheme("settings"),
-                            tr("&Settings..."), this);
+  settingsAct = new QAction(tr("&Settings..."), this);
   settingsAct->setShortcut(tr("Ctrl+T"));
   settingsAct->setToolTip(tr("Programm settings"));
   settingsAct->setStatusTip(tr("Programm settings"));
@@ -1060,8 +1026,7 @@ void MainWindow::createActions() {
   checkForUpdateAct->setStatusTip(tr("Check whether a newer version exits."));
   connect(checkForUpdateAct, SIGNAL(triggered()), this, SLOT(checkForUpdate()));
 
-  aboutAct = new QAction(QIcon::fromTheme("help-about"),
-                         tr("&About"), this);
+  aboutAct = new QAction(tr("&About"), this);
   aboutAct->setToolTip(tr("Show the application's About box"));
   aboutAct->setStatusTip(tr("Show the application's About box"));
   connect(aboutAct, SIGNAL(triggered()), this, SLOT(about()));
