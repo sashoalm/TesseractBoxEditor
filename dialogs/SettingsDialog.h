@@ -60,7 +60,6 @@ class SettingsDialog : public QDialog, public Ui::SettingsDialog {
   private:
     void initSettings();
     void initLangs();
-    void initStyles();
     void chooseColor(QPushButton* button, QColor* color);
     void updateColorButton(QPushButton* button, const QColor& color);
 

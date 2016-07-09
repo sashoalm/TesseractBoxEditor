@@ -39,31 +39,6 @@ int main(int argc, char* argv[]) {
   app.setOrganizationName(SETTING_ORGANIZATION);
   app.setApplicationName(SETTING_APPLICATION);
 
-  QSettings settings(QSettings::IniFormat, QSettings::UserScope,
-                       SETTING_ORGANIZATION, SETTING_APPLICATION);
-  //Set the style saved inside the configuration if any
-  QString style = settings.value("GUI/Style").toString();
-  if (style.isEmpty()) {
-    app.setStyle(QStyleFactory::create("Plastique"));
-  } else {
-    app.setStyle(QStyleFactory::create(style));
-  }
-
-  //Set the icon theme saved inside the configuration if any
-  QString iconTheme = settings.value("GUI/IconTheme").toString();
-  if (!iconTheme.isEmpty()) {
-      QIcon::setThemeName(iconTheme);
-  }
-  static const char * GENERIC_ICON_TO_CHECK = "fileopen";
-  static const char * FALLBACK_ICON_THEME = "QBE-Faenza";
-  if (!QIcon::hasThemeIcon(GENERIC_ICON_TO_CHECK)) {
-      //If there is no default working icon theme then we should
-      //use an icon theme that we provide via a .qrc file
-      //This case happens under Windows and Mac OS X
-      //This does not happen under GNOME or KDE
-      QIcon::setThemeName(FALLBACK_ICON_THEME);
-  }
-
   #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
   #endif

@@ -123,23 +123,6 @@ void SettingsDialog::initSettings() {
   if (settings.contains("GUI/ImageFontOffset"))
     offsetSpinBox->setValue(settings.value("GUI/ImageFontOffset").toInt());
 
-  initStyles();
-  if (settings.contains("GUI/Style")) {
-      int styleindex = styleComboBox->findText(
-            settings.value("GUI/Style").toString());
-      styleComboBox->setCurrentIndex(styleindex);
-  } else {
-      styleComboBox->setCurrentIndex(0);
-  }
-
-  if (settings.contains("GUI/IconTheme")) {
-      int themeindex = themeComboBox->findText(
-            settings.value("GUI/IconTheme").toString());
-      themeComboBox->setCurrentIndex(themeindex);
-  } else {
-      themeComboBox->setCurrentIndex(0);
-  }
-
   if (settings.contains("GUI/BalloonCount"))
     ballonsSpinBox->setValue(settings.value("GUI/BalloonCount").toInt());
 
@@ -220,8 +203,6 @@ void SettingsDialog::saveSettings() {
   settings.setValue("GUI/UseTheSameFont", useSameFontCB->isChecked());
   settings.setValue("GUI/ImageFontOffset", offsetSpinBox->value());
   settings.setValue("GUI/BalloonCount", ballonsSpinBox->value());
-  settings.setValue("GUI/Style", styleComboBox->currentText());
-  settings.setValue("GUI/IconTheme", themeComboBox->currentText());
 
   settings.setValue("GUI/ImageFontColor", imageFontColor);
   settings.setValue("GUI/Rectagle", rectColor);
@@ -306,21 +287,6 @@ void SettingsDialog::on_pbSelectDP_clicked() {
 
 void SettingsDialog::on_pbCheck_clicked() {
     initLangs();
-}
-
-void SettingsDialog::initStyles() {
-    QStringList styles =  QStyleFactory::keys();
-
-    // Clean combobox
-    int styleCount = styleComboBox->count();
-    if (styleCount > 0)
-      for (int i = styleCount; i >= 0; i--) {
-        styleComboBox->removeItem(0);
-      }
-
-    QString style;
-    foreach(style, styles)
-      styleComboBox->addItem(style);
 }
 
 void SettingsDialog::initLangs() {
