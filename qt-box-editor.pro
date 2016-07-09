@@ -12,15 +12,7 @@ INCLUDEPATH += ./ \
     src
 
 QT += network
-#QT += testlib
 
-#CONFIG += debug warn_on
-CONFIG += release warn_off
-
-OBJECTS_DIR += temp
-MOC_DIR += temp
-UI_DIR += temp
-RCC_DIR += temp
 DEFINES += VERSION=\\\"$${VERSION}\\\"
 
 FORMS += \
@@ -61,17 +53,14 @@ win32 {
     CONFIG += release embed_manifest_exe
     TMAKE_CXXFLAGS += -DQT_NODLL
     TMAKE_CXXFLAGS += -fno-exceptions -fno-rtti -static
-     DEFINES += WINDOWS
-    #QMAKE_LFLAGS.gcc += -static-libgcc # -static
+    DEFINES += WINDOWS
     RC_FILE = resources/win.rc
     INCLUDEPATH += $$PWD/win32-external/include/
     LIBS += -lws2_32 -L$$PWD/win32-external/lib
 }
 
 unix:!macx {
-    message(Starting UNIX build...)
     greaterThan(QT_MAJOR_VERSION, 5) {
-      message(Qt $$[QT_VERSION] was detected.)
       QT += widgets
       INCLUDEPATH += /opt/include/
       LIBS += -L/opt/lib
@@ -85,7 +74,6 @@ unix:!macx {
 # TESSDATE_PREFIX in the Settings of the App is: /usr/local/share/
 # Then close Settings and reopen Settings to select the language
 macx {
-    message(Starting OSX build...)
     QT += widgets
     INCLUDEPATH += /usr/local/include/
     LIBS += -L/usr/local/lib
