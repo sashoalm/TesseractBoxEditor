@@ -11,7 +11,7 @@ INCLUDEPATH += ./ \
     src/include \
     src
 
-QT += network svg
+QT += network
 #QT += testlib
 
 #CONFIG += debug warn_on
@@ -61,7 +61,6 @@ win32 {
     CONFIG += release embed_manifest_exe
     TMAKE_CXXFLAGS += -DQT_NODLL
     TMAKE_CXXFLAGS += -fno-exceptions -fno-rtti -static
-    #QTPLUGIN += qsvg # image formats
      DEFINES += WINDOWS
     #QMAKE_LFLAGS.gcc += -static-libgcc # -static
     RC_FILE = resources/win.rc

@@ -24,10 +24,6 @@
 #include <QTextCodec>
 #include <QApplication>
 #include <QStyleFactory>
-#if defined _COMPOSE_STATIC_
-#include <QtPlugin>
-Q_IMPORT_PLUGIN(qsvg)
-#endif
 
 #include "MainWindow.h"
 #include "Settings.h"
