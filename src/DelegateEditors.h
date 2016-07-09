@@ -32,10 +32,11 @@
 #include <QItemDelegate>
 #include <QSpinBox>
 
-class SpinBoxDelegate : public QItemDelegate {
-  Q_OBJECT
+class SpinBoxDelegate : public QItemDelegate
+{
+    Q_OBJECT
 
-  public:
+public:
     explicit SpinBoxDelegate(QObject *parent = 0);
     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                           const QModelIndex &index) const;
@@ -45,9 +46,9 @@ class SpinBoxDelegate : public QItemDelegate {
                       const QModelIndex &index) const;
 
     void updateEditorGeometry(QWidget *editor,
-            const QStyleOptionViewItem &option, const QModelIndex &index) const;
+                              const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
-  signals:
+signals:
     void sbd_valueChanged(int sbdValue);
     void sbd_editingFinished();
 };
@@ -56,16 +57,16 @@ class CheckboxDelegate : public QItemDelegate
 {
     Q_OBJECT
 
-  public:
+public:
     CheckboxDelegate(QObject* parent = 0);
     QWidget* createEditor(QWidget* parent, const QStyleOptionViewItem& option,
                           const QModelIndex& index) const;
     bool editorEvent(QEvent* event, QAbstractItemModel* model, const QStyleOptionViewItem& option,
-                             const QModelIndex& index);
+                     const QModelIndex& index);
 
     void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
 
-  signals:
+signals:
     void toggled(bool checked, int column);
 };
 
@@ -73,11 +74,11 @@ class LineEditDelegate : public QItemDelegate
 {
     Q_OBJECT
 
-  public:
+public:
     LineEditDelegate(QObject* parent = 0);
     QWidget* createEditor(QWidget* parent) const;
 
-  signals:
+signals:
     void led_editstarted();
     void led_editfinished();
 };

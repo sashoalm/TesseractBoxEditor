@@ -31,8 +31,9 @@ namespace Ui {
     class DrawRect;
 }
 
-class DrawRectangle : public QDialog {
-  Q_OBJECT
+class DrawRectangle : public QDialog
+{
+    Q_OBJECT
 
 public:
     DrawRectangle(QWidget* parent = 0, QString title = "", int maxWidth = 0,

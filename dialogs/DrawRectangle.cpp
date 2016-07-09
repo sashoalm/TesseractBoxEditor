@@ -29,35 +29,35 @@ DrawRectangle::DrawRectangle(QWidget* parent, QString title, int maxWidth,
     QDialog(parent),
     ui(new Ui::DrawRect)
 {
-  ui->setupUi(this);
+    ui->setupUi(this);
 
-  if (!title.isEmpty())
-      setWindowTitle(tr("Draw rectangle in %1:").arg(title));
+    if (!title.isEmpty())
+        setWindowTitle(tr("Draw rectangle in %1:").arg(title));
 
-  ui->spinBox_x1->setMaximum(maxWidth);
-  ui->spinBox_x2->setMaximum(maxWidth);
-  ui->spinBox_y1->setMaximum(maxHeight);
-  ui->spinBox_y2->setMaximum(maxHeight);
+    ui->spinBox_x1->setMaximum(maxWidth);
+    ui->spinBox_x2->setMaximum(maxWidth);
+    ui->spinBox_y1->setMaximum(maxHeight);
+    ui->spinBox_y2->setMaximum(maxHeight);
 
-  ui->spinBox_x1->setFocus();
-  // workaround selectAll() do not work...
-  ui->spinBox_x1->stepUp();
-  ui->spinBox_x1->stepDown();
+    ui->spinBox_x1->setFocus();
+    // workaround selectAll() do not work...
+    ui->spinBox_x1->stepUp();
+    ui->spinBox_x1->stepDown();
 
-  QLabel *lbl = new QLabel("<b>OR</b> you can insert line from Tesseract output e.g. <i>((1645,6315),(1756,6432))</i>", this);
-  lbl->setToolTip("Use this, if you got Tesseract's output like <br/><pre>FAIL! APPLY_BOXES: boxfile line 58/D"
-                  "((3166,6595),(3267,6686)): FAILURE! Couldn't find a matching blob</pre>");
+    QLabel *lbl = new QLabel("<b>OR</b> you can insert line from Tesseract output e.g. <i>((1645,6315),(1756,6432))</i>", this);
+    lbl->setToolTip("Use this, if you got Tesseract's output like <br/><pre>FAIL! APPLY_BOXES: boxfile line 58/D"
+                    "((3166,6595),(3267,6686)): FAILURE! Couldn't find a matching blob</pre>");
 
-  // NOTE: We do next here:
-  //    1) delete buttonBox from layout
-  //    2) insert our widgets with respective span parameters
-  //    3) insert original buttonBox
-  QLayoutItem *buttonBox = ui->gridLayout->itemAt(ui->gridLayout->rowCount());
-  ui->gridLayout->addWidget(lbl, ui->gridLayout->rowCount(), 0, 4, 0);
-  edtTesseractOutput = new QLineEdit(this);
-  edtTesseractOutput->setPlaceholderText("Enter here numbers like '((3183,6605),(3291,6716))'");
-  ui->gridLayout->addWidget(edtTesseractOutput, ui->gridLayout->rowCount(), 0, 4, 0);
-  ui->gridLayout->addWidget(buttonBox->widget(), ui->gridLayout->rowCount(), 0, 4, 0);
+    // NOTE: We do next here:
+    //    1) delete buttonBox from layout
+    //    2) insert our widgets with respective span parameters
+    //    3) insert original buttonBox
+    QLayoutItem *buttonBox = ui->gridLayout->itemAt(ui->gridLayout->rowCount());
+    ui->gridLayout->addWidget(lbl, ui->gridLayout->rowCount(), 0, 4, 0);
+    edtTesseractOutput = new QLineEdit(this);
+    edtTesseractOutput->setPlaceholderText("Enter here numbers like '((3183,6605),(3291,6716))'");
+    ui->gridLayout->addWidget(edtTesseractOutput, ui->gridLayout->rowCount(), 0, 4, 0);
+    ui->gridLayout->addWidget(buttonBox->widget(), ui->gridLayout->rowCount(), 0, 4, 0);
 }
 
 DrawRectangle::~DrawRectangle()

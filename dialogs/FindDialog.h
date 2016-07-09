@@ -31,23 +31,24 @@
 
 #include "ui_FindDialog.h"
 
-class FindDialog : public QDialog, public Ui::Find {
-  Q_OBJECT
+class FindDialog : public QDialog, public Ui::Find
+{
+    Q_OBJECT
 
-  public:
+public:
     explicit FindDialog(QWidget* parent = 0, QString title = "");
 
-  public slots:
+public slots:
     void blinkFindDialog();
 
-  signals:
+signals:
     void findNext(const QString &smbl, Qt::CaseSensitivity mc);
     void findPrev(const QString &smbl, Qt::CaseSensitivity mc);
 
-  protected:
+protected:
     void closeEvent(QCloseEvent* event);
 
-  private:
+private:
     QPushButton *findNextButton;
     QPushButton *findPrevButton;
     QPushButton *closeButton;
@@ -56,7 +57,7 @@ class FindDialog : public QDialog, public Ui::Find {
 
     void writeGeometry();
 
-  private slots:
+private slots:
     void on_lineEdit_textChanged();
     void findNext();
     void findPrev();

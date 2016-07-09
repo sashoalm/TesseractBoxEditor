@@ -34,18 +34,19 @@
 #include "ui_SettingsDialog.h"
 #include "Settings.h"
 
-class SettingsDialog : public QDialog, public Ui::SettingsDialog {
-  Q_OBJECT
+class SettingsDialog : public QDialog, public Ui::SettingsDialog
+{
+    Q_OBJECT
 
-  public:
+public:
     explicit SettingsDialog(QWidget* pard = 0, int tabIndex = 0);
     ~SettingsDialog();
     QString getLangName(QString lang);
 
-  signals:
+signals:
     void settingsChanged();
 
-  private slots:
+private slots:
     void on_fontButton_clicked();
     void on_fontImageButton_clicked();
     void on_imageFontColorButton_clicked();
@@ -57,7 +58,7 @@ class SettingsDialog : public QDialog, public Ui::SettingsDialog {
     void on_pbCheck_clicked();
     void saveSettings();
 
-  private:
+private:
     void initSettings();
     void initLangs();
     void chooseColor(QPushButton* button, QColor* color);

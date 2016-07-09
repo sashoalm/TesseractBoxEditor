@@ -26,10 +26,11 @@
 #include <QDialog>
 #include "ui_ShortCutDialog.h"
 
-class ShortCutsDialog : public QDialog, public Ui::ShortCutDialog {
-  Q_OBJECT
+class ShortCutsDialog : public QDialog, public Ui::ShortCutDialog
+{
+    Q_OBJECT
 
-  public:
+public:
     explicit ShortCutsDialog(QWidget* = 0);
 };
 

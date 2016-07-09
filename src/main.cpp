@@ -28,22 +28,23 @@
 #include "MainWindow.h"
 #include "Settings.h"
 
-int main(int argc, char* argv[]) {
-  QApplication app(argc, argv);
-  app.setOrganizationName("qt-box-editor");
-  app.setApplicationName("QT Box Editor");
-  app.setWindowIcon(QIcon(":/icons/qbe.png"));
+int main(int argc, char* argv[])
+{
+    QApplication app(argc, argv);
+    app.setOrganizationName("qt-box-editor");
+    app.setApplicationName("QT Box Editor");
+    app.setWindowIcon(QIcon(":/icons/qbe.png"));
 
-  #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     QTextCodec::setCodecForTr(QTextCodec::codecForName("UTF-8"));
-  #endif
+#endif
 
-  MainWindow mainWin;
-  mainWin.show();
-  for (int i = 1; i < argc; ++i) {
-    mainWin.addChild(argv[i]);
-  }
+    MainWindow mainWin;
+    mainWin.show();
+    for (int i = 1; i < argc; ++i) {
+        mainWin.addChild(argv[i]);
+    }
 
-  return app.exec();
+    return app.exec();
 }
 

@@ -25,28 +25,156 @@
 #include <QStyleFactory>
 
 SettingsDialog::SettingsDialog(QWidget* parent, int tabIndex)
-  : QDialog(parent) {
-  setFixedSize(420, 370);
-  setWindowTitle(tr("%1 :: Settings...").arg(QApplication::instance()->applicationName()));
+    : QDialog(parent)
+{
+    setFixedSize(420, 370);
+    setWindowTitle(tr("%1 :: Settings...").arg(QApplication::instance()->applicationName()));
 
-  setupUi(this);
-  initSettings();
-  initLangs();
+    setupUi(this);
+    initSettings();
+    initLangs();
 
-  QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(saveSettings()));
-  QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    QObject::connect(buttonBox, SIGNAL(accepted()), this, SLOT(saveSettings()));
+    QObject::connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
 
-  tabSetting->setCurrentIndex(tabIndex);
+    tabSetting->setCurrentIndex(tabIndex);
 }
 
 SettingsDialog::~SettingsDialog() {}
 
-void SettingsDialog::on_fontButton_clicked() {
-  bool ok = false;
+void SettingsDialog::on_fontButton_clicked()
+{
+    bool ok = false;
 
-  tableFont = QFontDialog::getFont(&ok, fontLabel->font(), this,
-                                   "Select font...");
-  if (ok) {
+    tableFont = QFontDialog::getFont(&ok, fontLabel->font(), this,
+                                     "Select font...");
+    if (ok) {
+        QFont tempFont = tableFont;
+        // Lets use reasonable font size ;-)
+        if (tableFont.pointSize() > 12)
+            tempFont.setPointSize(12);
+        fontLabel->setFont(tempFont);
+        fontLabel->setText(tableFont.family().toLocal8Bit() +
+                           tr(", %1 pt").arg(tableFont.pointSize()));
+    }
+}
+
+void SettingsDialog::on_fontImageButton_clicked()
+{
+    bool ok = false;
+
+    imageFont = QFontDialog::getFont(&ok, fontImageLabel->font(), this,
+                                     "Select font...");
+    if (ok) {
+        QFont tempFont = imageFont;
+        // Lets use reasonable font size ;-)
+        if (imageFont.pointSize() > 12)
+            tempFont.setPointSize(12);
+        fontImageLabel->setFont(imageFont);
+        fontImageLabel->setText(imageFont.family().toLocal8Bit() +
+                                tr(", %1 pt").arg(imageFont.pointSize()));
+    }
+}
+
+void SettingsDialog::on_imageFontColorButton_clicked()
+{
+    chooseColor(imageFontColorButton, &imageFontColor);
+}
+
+void SettingsDialog::on_colorRectButton_clicked()
+{
+    chooseColor(colorRectButton, &rectColor);
+}
+
+void SettingsDialog::on_rectFillColorButton_clicked()
+{
+    chooseColor(rectFillColorButton, &rectFillColor);
+}
+
+void SettingsDialog::on_colorBoxButton_clicked()
+{
+    chooseColor(colorBoxButton, &boxColor);
+}
+
+void SettingsDialog::on_backgroundColorButton_clicked()
+{
+    chooseColor(backgroundColorButton, &backgroundColor);
+}
+
+void SettingsDialog::initSettings()
+{
+    QSettings settings;
+    QString fontname = settings.value("GUI/Font").toString();
+
+    if (fontname.isEmpty()) {
+        tableFont.setFamily(TABLE_FONT);
+        tableFont.setPointSize(TABLE_FONT_SIZE);
+    } else {
+        tableFont = settings.value("GUI/Font").value<QFont>();
+    }
+
+    QString fontImageName = settings.value("GUI/ImageFont").toString();
+    if (fontImageName.isEmpty()) {
+        imageFont.setFamily(TABLE_FONT);
+        imageFont.setPointSize(TABLE_FONT_SIZE);
+    } else {
+        imageFont = settings.value("GUI/ImageFont").value<QFont>();
+    }
+
+    if (settings.contains("GUI/UseTheSameFont")) {
+        useSameFontCB->setChecked(settings.value("GUI/UseTheSameFont").toBool());
+        fontImageButton->setDisabled(useSameFontCB->isChecked());
+        fontImageLabel->setDisabled(useSameFontCB->isChecked());
+        fontImageLbl->setDisabled(useSameFontCB->isChecked());
+    }
+
+    if (settings.contains("GUI/ImageFontOffset"))
+        offsetSpinBox->setValue(settings.value("GUI/ImageFontOffset").toInt());
+
+    if (settings.contains("GUI/BalloonCount"))
+        ballonsSpinBox->setValue(settings.value("GUI/BalloonCount").toInt());
+
+    if (settings.contains("GUI/ImageFontColor")) {
+        imageFontColor = settings.value("GUI/ImageFontColor").value<QColor>();
+    } else {
+        imageFontColor = Qt::red;
+    }
+
+    if (settings.contains("GUI/Rectagle")) {
+        rectColor = settings.value("GUI/Rectagle").value<QColor>();
+    } else {
+        rectColor = Qt::red;
+    }
+
+    if (settings.contains("GUI/Rectagle_fill")) {
+        rectFillColor = settings.value("GUI/Rectagle_fill").value<QColor>();
+    } else {
+        rectFillColor = Qt::red;
+        rectFillColor.setAlpha(127);
+    }
+
+    if (settings.contains("GUI/Box")) {
+        boxColor = settings.value("GUI/Box").value<QColor>();
+    } else {
+        boxColor = Qt::green;
+    }
+
+    if (settings.contains("GUI/BackgroundColor")) {
+        backgroundColor = settings.value("GUI/BackgroundColor").value<QColor>();
+    } else {
+        backgroundColor = (Qt::gray);
+    }
+
+    // Text settings
+    if (settings.contains("Text/OpenDialog"))
+        cbOpenDialog->setChecked(settings.value("Text/OpenDialog").toBool());
+    if (settings.contains("Text/WordSpace"))
+        sbWordSpace->setValue(settings.value("Text/WordSpace").toInt());
+    if (settings.contains("Text/ParagraphIndent"))
+        spParaIndent->setValue(settings.value("Text/ParagraphIndent").toInt());
+    if (settings.contains("Text/Ligatures"))
+        pteLigatures->setPlainText(settings.value("Text/Ligatures").toString());
+
     QFont tempFont = tableFont;
     // Lets use reasonable font size ;-)
     if (tableFont.pointSize() > 12)
@@ -54,240 +182,127 @@ void SettingsDialog::on_fontButton_clicked() {
     fontLabel->setFont(tempFont);
     fontLabel->setText(tableFont.family().toLocal8Bit() +
                        tr(", %1 pt").arg(tableFont.pointSize()));
-  }
-}
 
-void SettingsDialog::on_fontImageButton_clicked() {
-  bool ok = false;
-
-  imageFont = QFontDialog::getFont(&ok, fontImageLabel->font(), this,
-                                   "Select font...");
-  if (ok) {
-    QFont tempFont = imageFont;
-    // Lets use reasonable font size ;-)
+    tempFont = imageFont;
     if (imageFont.pointSize() > 12)
-          tempFont.setPointSize(12);
-    fontImageLabel->setFont(imageFont);
+        tempFont.setPointSize(12);
+    fontImageLabel->setFont(tempFont);
     fontImageLabel->setText(imageFont.family().toLocal8Bit() +
-                       tr(", %1 pt").arg(imageFont.pointSize()));
-  }
+                            tr(", %1 pt").arg(imageFont.pointSize()));
+
+    updateColorButton(imageFontColorButton, imageFontColor);
+    updateColorButton(colorRectButton, rectColor);
+    updateColorButton(rectFillColorButton, rectFillColor);
+    updateColorButton(colorBoxButton, boxColor);
+    updateColorButton(backgroundColorButton, backgroundColor);
+
+    // Tesseract datapath settings, langs should be set later
+    if (settings.contains("Tesseract/DataPath")) {
+        lnPrefix->setText(settings.value("Tesseract/DataPath").toString());
+    }
 }
 
-void SettingsDialog::on_imageFontColorButton_clicked() {
-  chooseColor(imageFontColorButton, &imageFontColor);
-}
-
-void SettingsDialog::on_colorRectButton_clicked() {
-  chooseColor(colorRectButton, &rectColor);
-}
-
-void SettingsDialog::on_rectFillColorButton_clicked() {
-  chooseColor(rectFillColorButton, &rectFillColor);
-}
-
-void SettingsDialog::on_colorBoxButton_clicked() {
-  chooseColor(colorBoxButton, &boxColor);
-}
-
-void SettingsDialog::on_backgroundColorButton_clicked() {
-  chooseColor(backgroundColorButton, &backgroundColor);
-}
-
-void SettingsDialog::initSettings() {
-  QSettings settings;
-  QString fontname = settings.value("GUI/Font").toString();
-
-  if (fontname.isEmpty()) {
-    tableFont.setFamily(TABLE_FONT);
-    tableFont.setPointSize(TABLE_FONT_SIZE);
-  } else {
-    tableFont = settings.value("GUI/Font").value<QFont>();
-  }
-
-   QString fontImageName = settings.value("GUI/ImageFont").toString();
-   if (fontImageName.isEmpty()) {
-     imageFont.setFamily(TABLE_FONT);
-     imageFont.setPointSize(TABLE_FONT_SIZE);
-   } else {
-     imageFont = settings.value("GUI/ImageFont").value<QFont>();
-   }
-
-  if (settings.contains("GUI/UseTheSameFont")) {
-     useSameFontCB->setChecked(settings.value("GUI/UseTheSameFont").toBool());
-     fontImageButton->setDisabled(useSameFontCB->isChecked());
-     fontImageLabel->setDisabled(useSameFontCB->isChecked());
-     fontImageLbl->setDisabled(useSameFontCB->isChecked());
-  }
-
-  if (settings.contains("GUI/ImageFontOffset"))
-    offsetSpinBox->setValue(settings.value("GUI/ImageFontOffset").toInt());
-
-  if (settings.contains("GUI/BalloonCount"))
-    ballonsSpinBox->setValue(settings.value("GUI/BalloonCount").toInt());
-
-  if (settings.contains("GUI/ImageFontColor")) {
-    imageFontColor = settings.value("GUI/ImageFontColor").value<QColor>();
-  } else {
-    imageFontColor = Qt::red;
-  }
-
-  if (settings.contains("GUI/Rectagle")) {
-    rectColor = settings.value("GUI/Rectagle").value<QColor>();
-  } else {
-    rectColor = Qt::red;
-  }
-
-  if (settings.contains("GUI/Rectagle_fill")) {
-    rectFillColor = settings.value("GUI/Rectagle_fill").value<QColor>();
-  } else {
-    rectFillColor = Qt::red;
-    rectFillColor.setAlpha(127);
-  }
-
-  if (settings.contains("GUI/Box")) {
-    boxColor = settings.value("GUI/Box").value<QColor>();
-  } else {
-    boxColor = Qt::green;
-  }
-
-  if (settings.contains("GUI/BackgroundColor")) {
-    backgroundColor = settings.value("GUI/BackgroundColor").value<QColor>();
-  } else {
-    backgroundColor = (Qt::gray);
-  }
-
-  // Text settings
-  if (settings.contains("Text/OpenDialog"))
-    cbOpenDialog->setChecked(settings.value("Text/OpenDialog").toBool());
-  if (settings.contains("Text/WordSpace"))
-    sbWordSpace->setValue(settings.value("Text/WordSpace").toInt());
-  if (settings.contains("Text/ParagraphIndent"))
-    spParaIndent->setValue(settings.value("Text/ParagraphIndent").toInt());
-  if (settings.contains("Text/Ligatures"))
-    pteLigatures->setPlainText(settings.value("Text/Ligatures").toString());
-
-  QFont tempFont = tableFont;
-  // Lets use reasonable font size ;-)
-  if (tableFont.pointSize() > 12)
-        tempFont.setPointSize(12);
-  fontLabel->setFont(tempFont);
-  fontLabel->setText(tableFont.family().toLocal8Bit() +
-                     tr(", %1 pt").arg(tableFont.pointSize()));
-
-  tempFont = imageFont;
-  if (imageFont.pointSize() > 12)
-        tempFont.setPointSize(12);
-  fontImageLabel->setFont(tempFont);
-  fontImageLabel->setText(imageFont.family().toLocal8Bit() +
-                     tr(", %1 pt").arg(imageFont.pointSize()));
-
-  updateColorButton(imageFontColorButton, imageFontColor);
-  updateColorButton(colorRectButton, rectColor);
-  updateColorButton(rectFillColorButton, rectFillColor);
-  updateColorButton(colorBoxButton, boxColor);
-  updateColorButton(backgroundColorButton, backgroundColor);
-
-  // Tesseract datapath settings, langs should be set later
-  if (settings.contains("Tesseract/DataPath")) {
-    lnPrefix->setText(settings.value("Tesseract/DataPath").toString());
-  }
-}
-
-void SettingsDialog::saveSettings() {
+void SettingsDialog::saveSettings()
+{
     QSettings settings;
 
-  settings.setValue("GUI/Font", tableFont);
-  settings.setValue("GUI/ImageFont", imageFont);
-  settings.setValue("GUI/UseTheSameFont", useSameFontCB->isChecked());
-  settings.setValue("GUI/ImageFontOffset", offsetSpinBox->value());
-  settings.setValue("GUI/BalloonCount", ballonsSpinBox->value());
+    settings.setValue("GUI/Font", tableFont);
+    settings.setValue("GUI/ImageFont", imageFont);
+    settings.setValue("GUI/UseTheSameFont", useSameFontCB->isChecked());
+    settings.setValue("GUI/ImageFontOffset", offsetSpinBox->value());
+    settings.setValue("GUI/BalloonCount", ballonsSpinBox->value());
 
-  settings.setValue("GUI/ImageFontColor", imageFontColor);
-  settings.setValue("GUI/Rectagle", rectColor);
-  settings.setValue("GUI/Rectagle_fill", rectFillColor);
-  settings.setValue("GUI/Box", boxColor);
-  settings.setValue("GUI/BackgroundColor", backgroundColor);
+    settings.setValue("GUI/ImageFontColor", imageFontColor);
+    settings.setValue("GUI/Rectagle", rectColor);
+    settings.setValue("GUI/Rectagle_fill", rectFillColor);
+    settings.setValue("GUI/Box", boxColor);
+    settings.setValue("GUI/BackgroundColor", backgroundColor);
 
-  settings.setValue("Text/OpenDialog", cbOpenDialog->isChecked());
-  settings.setValue("Text/WordSpace", sbWordSpace->value());
-  settings.setValue("Text/ParagraphIndent", spParaIndent->value());
+    settings.setValue("Text/OpenDialog", cbOpenDialog->isChecked());
+    settings.setValue("Text/WordSpace", sbWordSpace->value());
+    settings.setValue("Text/ParagraphIndent", spParaIndent->value());
 
-  // remove duplicates and blank lines
-  QList<QString> ligatures = pteLigatures->toPlainText().split("\n");
-  QHash<QString, bool> h;
-  QString str;
+    // remove duplicates and blank lines
+    QList<QString> ligatures = pteLigatures->toPlainText().split("\n");
+    QHash<QString, bool> h;
+    QString str;
 
-  // make unique list
-  for (int i = 0; i < ligatures.size(); ++i)
-    h.insert(ligatures.at(i), true);
-  ligatures = h.keys();
+    // make unique list
+    for (int i = 0; i < ligatures.size(); ++i)
+        h.insert(ligatures.at(i), true);
+    ligatures = h.keys();
 
-  // convert list to string separated with "\n"
-  for (int i = 0; i < ligatures.size(); ++i) {
-    if (i == 0)
-      str = ligatures[i];
-    else
-      str += "\n" + ligatures[i];
-  }
-  str = str.remove(QRegExp("^\n"));
-  settings.setValue("Text/Ligatures", str);
+    // convert list to string separated with "\n"
+    for (int i = 0; i < ligatures.size(); ++i) {
+        if (i == 0)
+            str = ligatures[i];
+        else
+            str += "\n" + ligatures[i];
+    }
+    str = str.remove(QRegExp("^\n"));
+    settings.setValue("Text/Ligatures", str);
 
-  settings.setValue("Tesseract/DataPath", lnPrefix->text());
-  if (!cbLang->itemData(cbLang->currentIndex()).isNull())
-      settings.setValue("Tesseract/Lang",
-                    cbLang->itemData(cbLang->currentIndex()).toString());
+    settings.setValue("Tesseract/DataPath", lnPrefix->text());
+    if (!cbLang->itemData(cbLang->currentIndex()).isNull())
+        settings.setValue("Tesseract/Lang",
+                          cbLang->itemData(cbLang->currentIndex()).toString());
 
-  emit settingsChanged();
-  emit accept();
+    emit settingsChanged();
+    emit accept();
 }
 
-void SettingsDialog::chooseColor(QPushButton* button, QColor* color) {
+void SettingsDialog::chooseColor(QPushButton* button, QColor* color)
+{
 #if QT_VERSION >= 0x040500
-  QColor newColor = QColorDialog::getColor(*color, this, tr("Select color..."),
-                    QColorDialog::ShowAlphaChannel);
+    QColor newColor = QColorDialog::getColor(*color, this, tr("Select color..."),
+                      QColorDialog::ShowAlphaChannel);
 #else
-  QColor newColor = QColorDialog::getColor(*color, this, tr("Select color..."));
+    QColor newColor = QColorDialog::getColor(*color, this, tr("Select color..."));
 #endif
-  if (newColor.isValid()) {
-    *color = newColor;
-    updateColorButton(button, *color);
-  }
+    if (newColor.isValid()) {
+        *color = newColor;
+        updateColorButton(button, *color);
+    }
 }
 
 void SettingsDialog::updateColorButton(QPushButton* button,
-                                       const QColor& color) {
-  QPixmap pixmap(68, 20);
-  pixmap.fill(color);
-  QIcon icon(pixmap);
-  QSize iconSize(pixmap.width(), pixmap.height());
-  button->setIconSize(iconSize);
-  button->setIcon(icon);
+                                       const QColor& color)
+{
+    QPixmap pixmap(68, 20);
+    pixmap.fill(color);
+    QIcon icon(pixmap);
+    QSize iconSize(pixmap.width(), pixmap.height());
+    button->setIconSize(iconSize);
+    button->setIcon(icon);
 }
 
-void SettingsDialog::on_pbSelectDP_clicked() {
+void SettingsDialog::on_pbSelectDP_clicked()
+{
     QString prefix_dir = QFileDialog::getExistingDirectory(
-                          this,
-                          tr("Select Path Prefix To tessdata Directory..."),
-                          lnPrefix->text(),
-                          QFileDialog::ShowDirsOnly
-                          | QFileDialog::DontResolveSymlinks);
+                             this,
+                             tr("Select Path Prefix To tessdata Directory..."),
+                             lnPrefix->text(),
+                             QFileDialog::ShowDirsOnly
+                             | QFileDialog::DontResolveSymlinks);
     // we need only prefix endswith "/" and without tessdata!!!
     if (prefix_dir.contains(QRegExp("/tessdata$")))
-            prefix_dir.replace(QRegExp("/tessdata$"),"/");
+        prefix_dir.replace(QRegExp("/tessdata$"),"/");
     else if (prefix_dir.contains(QRegExp("/tessdata/$")))
         prefix_dir.replace(QRegExp("/tessdata/$"),"/");
     if (prefix_dir.right(1) != "/" && prefix_dir != "")
-            prefix_dir += "/";
+        prefix_dir += "/";
     if (prefix_dir != "")
         lnPrefix->setText(prefix_dir);
     initLangs();
 }
 
-void SettingsDialog::on_pbCheck_clicked() {
+void SettingsDialog::on_pbCheck_clicked()
+{
     initLangs();
 }
 
-void SettingsDialog::initLangs() {
+void SettingsDialog::initLangs()
+{
     QString datapath = lnPrefix->text();
     datapath += "tessdata";
     TessTools tt;
@@ -296,9 +311,9 @@ void SettingsDialog::initLangs() {
     // Clean combobox with languages
     int langsCount = cbLang->count();
     if (langsCount > 0)
-      for (int i = langsCount; i >= 0; i--) {
-        cbLang->removeItem(0);
-      }
+        for (int i = langsCount; i >= 0; i--) {
+            cbLang->removeItem(0);
+        }
 
     QString lang;
     foreach(lang, languages) {
@@ -319,7 +334,7 @@ void SettingsDialog::initLangs() {
     QSettings settings;
     if (settings.contains("Tesseract/Lang")) {
         int langindex = cbLang->findData(
-              settings.value("Tesseract/Lang").toString());
+                            settings.value("Tesseract/Lang").toString());
         cbLang->setCurrentIndex(langindex);
     }
 }
@@ -328,7 +343,8 @@ void SettingsDialog::initLangs() {
  * Get Language name from ISO 639-1 code
  * http://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
  */
-QString SettingsDialog::getLangName(QString lang) {
+QString SettingsDialog::getLangName(QString lang)
+{
     QMap<QString,QString> map;
     map["abk"] = QObject::trUtf8("Abkhaz");
     map["aar"] = QObject::trUtf8("Afar");

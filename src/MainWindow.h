@@ -60,26 +60,27 @@ class QTabWidget;
 class QSignalMapper;
 class ShortCutsDialog;
 
-class MainWindow : public QMainWindow {
+class MainWindow : public QMainWindow
+{
     Q_OBJECT
     QNetworkAccessManager manager;
 
-  public:
+public:
     MainWindow();
 
     void addChild(const QString& imageFileName);
     SettingsDialog* runSettingsDialog;
 
-  public slots:
+public slots:
     void checkForUpdate();
     void requestFinished(QNetworkReply* reply);
 
-  protected:
+protected:
     void dragEnterEvent(QDragEnterEvent* event);
     void dropEvent(QDropEvent* event);
     void closeEvent(QCloseEvent* event);
 
-  private slots:
+private slots:
     void open();
     void openRecentFile();
     void save();
@@ -137,7 +138,7 @@ class MainWindow : public QMainWindow {
     void zoomRatioChanged(qreal);
     void statusBarMessage(QString);
 
-  private:
+private:
     ShortCutsDialog* shortCutsDialog;
     ChildWidget* activeChild();
     void createActions();

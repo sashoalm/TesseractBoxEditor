@@ -47,16 +47,19 @@ const char *TessTools::kTrainedDataSuffix = "traineddata";
 
 // TODO(zdenop): Improve code here...
 
-TessTools::TessTools() {
+TessTools::TessTools()
+{
 }
 
-TessTools::~TessTools() {
+TessTools::~TessTools()
+{
 }
 
 /*
  * QString to const char
  */
-const char *TessTools::qString2Char(QString string) {
+const char *TessTools::qString2Char(QString string)
+{
     QByteArray byteArray = string.toUtf8();
     const char * constChar = byteArray.data();
     return constChar;
@@ -65,66 +68,67 @@ const char *TessTools::qString2Char(QString string) {
 /*!
  * Create tesseract box data from QImage
  */
-QString TessTools::makeBoxes(const QImage& qImage, const int page) {
-  PIX   *pixs;
-  char  *outText;
+QString TessTools::makeBoxes(const QImage& qImage, const int page)
+{
+    PIX   *pixs;
+    char  *outText;
 
-  if ((pixs = qImage2PIX(qImage)) == NULL) {
-    msg("Unsupported image type");
-    return "";
-  }
+    if ((pixs = qImage2PIX(qImage)) == NULL) {
+        msg("Unsupported image type");
+        return "";
+    }
 
-  // http://code.google.com/p/tesseract-ocr/issues/detail?id=228
-  setlocale(LC_NUMERIC, "C");
-  // QString to  const char *
-  #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
-  QByteArray byteArray = getLang().toAscii();
-  #else
-  QByteArray byteArray = getLang().toLocal8Bit();
-  #endif
-  const char * apiLang = byteArray.constData();
+    // http://code.google.com/p/tesseract-ocr/issues/detail?id=228
+    setlocale(LC_NUMERIC, "C");
+    // QString to  const char *
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+    QByteArray byteArray = getLang().toAscii();
+#else
+    QByteArray byteArray = getLang().toLocal8Bit();
+#endif
+    const char * apiLang = byteArray.constData();
 
-  // workaroung if datapath/TESSDATA_PREFIX is set...
-  #ifdef _WIN32
-  QString envQString = "TESSDATA_PREFIX=" + getDataPath() ;
-  QByteArray byteArrayWin = envQString.toUtf8();
-  const char * env = byteArrayWin.data();
-  putenv(env);
-  #else
-  QByteArray byteArray1 = getDataPath().toUtf8();
-  const char * datapath = byteArray1.data();
-  setenv("TESSDATA_PREFIX", datapath, 1);
-  #endif
+    // workaroung if datapath/TESSDATA_PREFIX is set...
+#ifdef _WIN32
+    QString envQString = "TESSDATA_PREFIX=" + getDataPath() ;
+    QByteArray byteArrayWin = envQString.toUtf8();
+    const char * env = byteArrayWin.data();
+    putenv(env);
+#else
+    QByteArray byteArray1 = getDataPath().toUtf8();
+    const char * datapath = byteArray1.data();
+    setenv("TESSDATA_PREFIX", datapath, 1);
+#endif
 
-  tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
-  if (api->Init(NULL, apiLang)) {
-    msg("Could not initialize tesseract.\n");
-    return "";
-  }
+    tesseract::TessBaseAPI *api = new tesseract::TessBaseAPI();
+    if (api->Init(NULL, apiLang)) {
+        msg("Could not initialize tesseract.\n");
+        return "";
+    }
 
-  QApplication::setOverrideCursor(Qt::WaitCursor);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
 
 #ifdef TESSERACT_VERSION
-  api->SetImage(pixs);
-  outText = api->GetBoxText(page);
+    api->SetImage(pixs);
+    outText = api->GetBoxText(page);
 #else
-  api->SetVariable("tessedit_create_boxfile", "1");
-  int timeout_millisec = 0;
-  const char* filename = NULL;
-  const char* retry_config = NULL;
-  STRING text_out;
-  if (!api->ProcessPage(pixs, page, filename, retry_config,
-                        timeout_millisec, &text_out)) {
-    msg("Error during processing.\n");
-  }
-  outText = text_out.string();
+    api->SetVariable("tessedit_create_boxfile", "1");
+    int timeout_millisec = 0;
+    const char* filename = NULL;
+    const char* retry_config = NULL;
+    STRING text_out;
+    if (!api->ProcessPage(pixs, page, filename, retry_config,
+                          timeout_millisec, &text_out)) {
+        msg("Error during processing.\n");
+    }
+    outText = text_out.string();
 #endif  // TESSERACT_VERSION
-  QApplication::restoreOverrideCursor();
+    QApplication::restoreOverrideCursor();
 
-  pixDestroy(&pixs);
-  api->End();
-  delete api;
-  return QString::fromUtf8(outText);
+    pixDestroy(&pixs);
+    api->End();
+    delete api;
+    return QString::fromUtf8(outText);
 }
 
 /*!
@@ -132,37 +136,38 @@ QString TessTools::makeBoxes(const QImage& qImage, const int page) {
  * input: QImage
  * result: PIX
  */
-PIX* TessTools::qImage2PIX(const QImage& qImage) {
-  PIX * pixs;
+PIX* TessTools::qImage2PIX(const QImage& qImage)
+{
+    PIX * pixs;
 
-  QImage myImage = qImage.rgbSwapped();
-  int width = myImage.width();
-  int height = myImage.height();
-  int depth = myImage.depth();
-  int wpl = myImage.bytesPerLine() / 4;
+    QImage myImage = qImage.rgbSwapped();
+    int width = myImage.width();
+    int height = myImage.height();
+    int depth = myImage.depth();
+    int wpl = myImage.bytesPerLine() / 4;
 
-  pixs = pixCreate(width, height, depth);
-  pixSetWpl(pixs, wpl);
-  pixSetColormap(pixs, NULL);
-  l_uint32 *datas = pixs->data;
+    pixs = pixCreate(width, height, depth);
+    pixSetWpl(pixs, wpl);
+    pixSetColormap(pixs, NULL);
+    l_uint32 *datas = pixs->data;
 
-  for (int y = 0; y < height; y++) {
-    l_uint32 *lines = datas + y * wpl;
-    QByteArray a((const char*)myImage.scanLine(y), myImage.bytesPerLine());
-    for (int j = 0; j < a.size(); j++) {
-      *((l_uint8 *)lines + j) = a[j];
+    for (int y = 0; y < height; y++) {
+        l_uint32 *lines = datas + y * wpl;
+        QByteArray a((const char*)myImage.scanLine(y), myImage.bytesPerLine());
+        for (int j = 0; j < a.size(); j++) {
+            *((l_uint8 *)lines + j) = a[j];
+        }
     }
-  }
 
-  const qreal toDPM = 1.0 / 0.0254;
-  int resolutionX = myImage.dotsPerMeterX() / toDPM;
-  int resolutionY = myImage.dotsPerMeterY() / toDPM;
+    const qreal toDPM = 1.0 / 0.0254;
+    int resolutionX = myImage.dotsPerMeterX() / toDPM;
+    int resolutionY = myImage.dotsPerMeterY() / toDPM;
 
-  if (resolutionX < 300) resolutionX = 300;
-  if (resolutionY < 300) resolutionY = 300;
-  pixSetResolution(pixs, resolutionX, resolutionY);
+    if (resolutionX < 300) resolutionX = 300;
+    if (resolutionY < 300) resolutionY = 300;
+    pixSetResolution(pixs, resolutionX, resolutionY);
 
-  return pixEndianByteSwapNew(pixs);
+    return pixEndianByteSwapNew(pixs);
 }
 
 /*!
@@ -170,80 +175,82 @@ PIX* TessTools::qImage2PIX(const QImage& qImage) {
  * input: PIX
  * result: QImage
  */
-QImage TessTools::PIX2qImage(PIX *pixImage) {
-  int width = pixGetWidth(pixImage);
-  int height = pixGetHeight(pixImage);
-  int depth = pixGetDepth(pixImage);
-  int bytesPerLine = pixGetWpl(pixImage) * 4;
-  l_uint32 * datas = pixGetData(pixEndianByteSwapNew(pixImage));
+QImage TessTools::PIX2qImage(PIX *pixImage)
+{
+    int width = pixGetWidth(pixImage);
+    int height = pixGetHeight(pixImage);
+    int depth = pixGetDepth(pixImage);
+    int bytesPerLine = pixGetWpl(pixImage) * 4;
+    l_uint32 * datas = pixGetData(pixEndianByteSwapNew(pixImage));
 
-  QImage::Format format;
-  if (depth == 1)
-    format = QImage::Format_Mono;
-  else if (depth == 8)
-    format = QImage::Format_Indexed8;
-  else
-    format = QImage::Format_RGB32;
+    QImage::Format format;
+    if (depth == 1)
+        format = QImage::Format_Mono;
+    else if (depth == 8)
+        format = QImage::Format_Indexed8;
+    else
+        format = QImage::Format_RGB32;
 
-  QImage result((uchar*)datas, width, height, bytesPerLine, format);
+    QImage result((uchar*)datas, width, height, bytesPerLine, format);
 
-  // Set resolution
-  l_int32 	xres, yres;
-  pixGetResolution(pixImage, &xres, &yres);
-  const qreal toDPM = 1.0 / 0.0254;
-  result.setDotsPerMeterX(xres * toDPM);
-  result.setDotsPerMeterY(yres * toDPM);
+    // Set resolution
+    l_int32 	xres, yres;
+    pixGetResolution(pixImage, &xres, &yres);
+    const qreal toDPM = 1.0 / 0.0254;
+    result.setDotsPerMeterX(xres * toDPM);
+    result.setDotsPerMeterY(yres * toDPM);
 
-  // Handle palette
-  QVector<QRgb> _bwCT;
-  _bwCT.append(qRgb(255,255,255));
-  _bwCT.append(qRgb(0,0,0));
+    // Handle palette
+    QVector<QRgb> _bwCT;
+    _bwCT.append(qRgb(255,255,255));
+    _bwCT.append(qRgb(0,0,0));
 
-  QVector<QRgb> _grayscaleCT(256);
-  for (int i = 0; i < 256; i++)  {
-    _grayscaleCT[i] = qRgb(i, i, i);
-  }
-  switch (depth) {
+    QVector<QRgb> _grayscaleCT(256);
+    for (int i = 0; i < 256; i++)  {
+        _grayscaleCT[i] = qRgb(i, i, i);
+    }
+    switch (depth) {
     case 1:
-      result.setColorTable(_bwCT);
-      break;
+        result.setColorTable(_bwCT);
+        break;
     case 8:
-      result.setColorTable(_grayscaleCT);
-      break;
+        result.setColorTable(_grayscaleCT);
+        break;
     default:
-      result.setColorTable(_grayscaleCT);
-  }
+        result.setColorTable(_grayscaleCT);
+    }
 
-  if (result.isNull()) {
-    static QImage none(0,0,QImage::Format_Invalid);
-    qDebug("Invalid format!!!\n");
-    return none;
-  }
+    if (result.isNull()) {
+        static QImage none(0,0,QImage::Format_Invalid);
+        qDebug("Invalid format!!!\n");
+        return none;
+    }
 
-  return result.rgbSwapped();
+    return result.rgbSwapped();
 }
 
-QImage TessTools::GetThresholded(const QImage& qImage) {
+QImage TessTools::GetThresholded(const QImage& qImage)
+{
     // TODO(zdenop): Check this for memory leak
     PIX * pixs = qImage2PIX(qImage);
 
     // Set tessdata as Enviromental Variable to avoid problems
     QByteArray byteArray1 = getDataPath().toUtf8();
-    #ifdef _WIN32
+#ifdef _WIN32
     QString envQString = "TESSDATA_PREFIX=" + byteArray1 ;
     const char * env = qString2Char(envQString);
     putenv(env);
-    #else
+#else
     const char * datapath = byteArray1.data();
     setenv("TESSDATA_PREFIX", datapath, 1);
-    #endif
+#endif
 
     // TODO(zdenop): Why apiLang = qString2Char(getLang()) do not work???
-    #if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
+#if QT_VERSION < QT_VERSION_CHECK(5, 0, 0)
     QByteArray byteArray = getLang().toAscii();
-    #else
+#else
     QByteArray byteArray = getLang().toLocal8Bit();
-    #endif
+#endif
     const char * apiLang = byteArray.constData();
 
     setlocale(LC_NUMERIC, "C");
@@ -264,16 +271,18 @@ QImage TessTools::GetThresholded(const QImage& qImage) {
     return tresholdedImage;
 }
 
-QString TessTools::getDataPath() {
+QString TessTools::getDataPath()
+{
     QSettings settings;
     QString dataPath;
     if (settings.contains("Tesseract/DataPath")) {
-      dataPath = settings.value("Tesseract/DataPath").toString();
+        dataPath = settings.value("Tesseract/DataPath").toString();
     }
     return dataPath;
 }
 
-QString TessTools::getLang() {
+QString TessTools::getLang()
+{
     QSettings settings;
     QString lang;
     if (settings.contains("Tesseract/Lang")) {
@@ -284,23 +293,24 @@ QString TessTools::getLang() {
         msg("You need to configure tesseract in Settings!");
         return "";
     }
-   return lang;
+    return lang;
 }
 
 /*!
  * Get QList<QString> with list of available languages
  */
-QList<QString> TessTools::getLanguages(QString datapath) {
+QList<QString> TessTools::getLanguages(QString datapath)
+{
     QList<QString> languages;
     QDir dir(datapath);
 
     if (!dir.exists()) {
-      QMessageBox msgBox;
-      msgBox.setText(QObject::tr("Cannot find the tessdata directory '%1'!\n").arg(datapath) +
-                  QObject::tr("Please check your configuration or tesseract instalation"));
-      msgBox.exec();
-      return languages;
-      }
+        QMessageBox msgBox;
+        msgBox.setText(QObject::tr("Cannot find the tessdata directory '%1'!\n").arg(datapath) +
+                       QObject::tr("Please check your configuration or tesseract instalation"));
+        msgBox.exec();
+        return languages;
+    }
 
     QString filter = "*.";
     filter += kTrainedDataSuffix;
@@ -311,15 +321,16 @@ QList<QString> TessTools::getLanguages(QString datapath) {
     QFileInfoList list = dir.entryInfoList();
 
     for (int i = 0; i < list.size(); ++i) {
-      QFileInfo fileInfo = list.at(i);
-      languages.append(QString("%1").arg(fileInfo.baseName()));
+        QFileInfo fileInfo = list.at(i);
+        languages.append(QString("%1").arg(fileInfo.baseName()));
     }
     qSort(languages);
 
     return languages;
 }
 
-void TessTools::msg(QString messageText) {
+void TessTools::msg(QString messageText)
+{
     QMessageBox msgBox;
     msgBox.setText(messageText);
     msgBox.exec();

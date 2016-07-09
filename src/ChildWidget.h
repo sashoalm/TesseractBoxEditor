@@ -102,13 +102,15 @@ struct BalloonSymbol {
 
 // Eight geometric directions
 enum Dir8m { dirNone = -1, dirE = 0, dirNE, dirN, dirNW, dirW, dirSW, dirS,
-             dirSE, dirCount };
+             dirSE, dirCount
+           };
 
 // Implements bbox resize feature by bbox boundary mouse dragging
-class DragResizer : public QObject, QGraphicsItemGroup {
+class DragResizer : public QObject, QGraphicsItemGroup
+{
     Q_OBJECT
 
-  private:
+private:
     // Distance from bbox boundary (in and out)
     // where resize mouse cursor appears
     static const int gripMargin = 3;
@@ -121,7 +123,7 @@ class DragResizer : public QObject, QGraphicsItemGroup {
     // Processes messages from all drag rectangles
     bool sceneEventFilter(QGraphicsItem* watched, QEvent* event);
 
-  public:
+public:
     // Stores current boundary
     QRect rect;
 
@@ -136,14 +138,15 @@ class DragResizer : public QObject, QGraphicsItemGroup {
     // Deactivates drag rectangles
     void disable();
 
-  signals:
+signals:
     void changed();
 };
 
-class ChildWidget : public QSplitter {
+class ChildWidget : public QSplitter
+{
     Q_OBJECT
 
-  public:
+public:
     explicit ChildWidget(QWidget* parent = 0);
 
     bool isModified() {
@@ -205,7 +208,7 @@ class ChildWidget : public QSplitter {
     void drawRectangle(bool checked);
     void readSettings();
 
-  public slots:
+public slots:
     void updateColWidthsOnSplitter(int pos, int index);
 
     void letterStartEdit();
@@ -230,7 +233,7 @@ class ChildWidget : public QSplitter {
 
     void boxDragChanged();
 
-  private:
+private:
     void initTable();
     void deleteSymbolByRow(int row);
     void undoDelete(UndoItem& ui, bool bIsRedo = false);
@@ -286,7 +289,7 @@ class ChildWidget : public QSplitter {
     void cleanTable();
     void loadTable();
 
-  private slots:
+private slots:
     void documentWasModified();
     void emitBoxChanged();
     bool slotChangePage(int sbdPage);
@@ -295,7 +298,7 @@ class ChildWidget : public QSplitter {
     void updateSelectionRects();
     void slotfileChanged(const QString& fileName);
 
-  signals:
+signals:
     void boxChanged();
     void modifiedChanged();
     void blinkFindDialog();
@@ -303,7 +306,7 @@ class ChildWidget : public QSplitter {
     void statusBarMessage(QString);
     void drawRectangleChoosen();
 
-  protected:
+protected:
     bool directType(QKeyEvent* event);
     void mousePressEvent(QMouseEvent* event);
     void mouseMoveEvent(QMouseEvent* event);
@@ -362,8 +365,9 @@ class ChildWidget : public QSplitter {
     DragResizer* resizer;
 
     template<class T>
-    class UndoStack : public QStack<T> {
-      public:
+    class UndoStack : public QStack<T>
+    {
+    public:
         void SetRedoStack(QStack<T>* pRedoStack) {
             m_pRedoStack = pRedoStack;
         }
@@ -379,7 +383,7 @@ class ChildWidget : public QSplitter {
             QStack<T>::push(t);
         }
 
-      private:
+    private:
         QStack<T>*  m_pRedoStack;
     };
 

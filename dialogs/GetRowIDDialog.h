@@ -29,13 +29,14 @@
 
 #include "ui_GetRowIDDialog.h"
 
-class GetRowIDDialog : public QDialog, public Ui::GetRowIDDialog {
-  Q_OBJECT
+class GetRowIDDialog : public QDialog, public Ui::GetRowIDDialog
+{
+    Q_OBJECT
 
-  public:
+public:
     explicit GetRowIDDialog(QWidget* parent = 0);
 
-  private slots:
+private slots:
     void on_lineEdit_textChanged();
 };
 

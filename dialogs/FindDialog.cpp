@@ -26,101 +26,110 @@
 #include <QDebug>
 
 FindDialog::FindDialog(QWidget* parent, QString title)
-  : QDialog(parent) {
-  setupUi(this);
+    : QDialog(parent)
+{
+    setupUi(this);
 
-  if (!title.isEmpty())
-      setWindowTitle(tr("Find in %1:").arg(title));
-  findNextButton = new QPushButton(tr("&Next"));
-  findNextButton->setDefault(true);
-  findNextButton->setEnabled(false);
-  findPrevButton = new QPushButton(tr("&Previous"));
-  findPrevButton->setEnabled(false);
-  closeButton = new QPushButton(tr("&Close"));
+    if (!title.isEmpty())
+        setWindowTitle(tr("Find in %1:").arg(title));
+    findNextButton = new QPushButton(tr("&Next"));
+    findNextButton->setDefault(true);
+    findNextButton->setEnabled(false);
+    findPrevButton = new QPushButton(tr("&Previous"));
+    findPrevButton->setEnabled(false);
+    closeButton = new QPushButton(tr("&Close"));
 
-  buttonBox->addButton(findNextButton,
-                       QDialogButtonBox::ActionRole);
-  buttonBox->addButton(findPrevButton,
-                       QDialogButtonBox::ActionRole);
-  buttonBox->addButton(closeButton,
-                       QDialogButtonBox::RejectRole);
+    buttonBox->addButton(findNextButton,
+                         QDialogButtonBox::ActionRole);
+    buttonBox->addButton(findPrevButton,
+                         QDialogButtonBox::ActionRole);
+    buttonBox->addButton(closeButton,
+                         QDialogButtonBox::RejectRole);
 
-  QRegExp regExp(".+");  // no empty string test
-  lineEdit->setValidator(new QRegExpValidator(regExp, this));
+    QRegExp regExp(".+");  // no empty string test
+    lineEdit->setValidator(new QRegExpValidator(regExp, this));
 
-  connect(findNextButton, SIGNAL(clicked()), this, SLOT(findNext()));
-  connect(findPrevButton, SIGNAL(clicked()), this, SLOT(findPrev()));
-  connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
-  connect(checkBox_Mc, SIGNAL(toggled(bool)), this, SLOT(changed_Mc(bool)));
-  connect(parent, SIGNAL(blinkFindDialog()), this, SLOT(blinkFindDialog()));
-  timerBlink = new QTimeLine(10);
-  originalBackColor = this->palette().color(QPalette::Background);;
-  getSettings();
+    connect(findNextButton, SIGNAL(clicked()), this, SLOT(findNext()));
+    connect(findPrevButton, SIGNAL(clicked()), this, SLOT(findPrev()));
+    connect(closeButton, SIGNAL(clicked()), this, SLOT(close()));
+    connect(checkBox_Mc, SIGNAL(toggled(bool)), this, SLOT(changed_Mc(bool)));
+    connect(parent, SIGNAL(blinkFindDialog()), this, SLOT(blinkFindDialog()));
+    timerBlink = new QTimeLine(10);
+    originalBackColor = this->palette().color(QPalette::Background);;
+    getSettings();
 }
 
-void FindDialog::on_lineEdit_textChanged() {
-  findNextButton->setEnabled(lineEdit->hasAcceptableInput());
-  findPrevButton->setEnabled(lineEdit->hasAcceptableInput());
+void FindDialog::on_lineEdit_textChanged()
+{
+    findNextButton->setEnabled(lineEdit->hasAcceptableInput());
+    findPrevButton->setEnabled(lineEdit->hasAcceptableInput());
 }
 
-void FindDialog::findNext() {
-  QString symbol = lineEdit->text();
-  Qt::CaseSensitivity mc =
-    checkBox_Mc->isChecked() ? Qt::CaseSensitive
-    : Qt::CaseInsensitive;
-  emit findNext(symbol, mc);
+void FindDialog::findNext()
+{
+    QString symbol = lineEdit->text();
+    Qt::CaseSensitivity mc =
+        checkBox_Mc->isChecked() ? Qt::CaseSensitive
+        : Qt::CaseInsensitive;
+    emit findNext(symbol, mc);
 }
 
-void FindDialog::findPrev() {
-  QString symbol = lineEdit->text();
-  Qt::CaseSensitivity mc =
-    checkBox_Mc->isChecked() ? Qt::CaseSensitive
-    : Qt::CaseInsensitive;
-  emit findPrev(symbol, mc);
+void FindDialog::findPrev()
+{
+    QString symbol = lineEdit->text();
+    Qt::CaseSensitivity mc =
+        checkBox_Mc->isChecked() ? Qt::CaseSensitive
+        : Qt::CaseInsensitive;
+    emit findPrev(symbol, mc);
 }
 
-void FindDialog::changed_Mc(bool status) {
-  QSettings settings;
-  settings.setValue("Find/MatchCase", status);
+void FindDialog::changed_Mc(bool status)
+{
+    QSettings settings;
+    settings.setValue("Find/MatchCase", status);
 }
 
-void FindDialog::blinkFindDialog() {
-  QApplication::beep();
-  if(timerBlink->state() == QTimeLine::NotRunning)
-    {
-    timerBlink->resume();
-    connect(timerBlink, SIGNAL(finished()), this, SLOT(blinkFinished()));
+void FindDialog::blinkFindDialog()
+{
+    QApplication::beep();
+    if(timerBlink->state() == QTimeLine::NotRunning) {
+        timerBlink->resume();
+        connect(timerBlink, SIGNAL(finished()), this, SLOT(blinkFinished()));
     }
-  QPalette pal = this->palette();
-  pal.setColor(QPalette::Background, Qt::red);
-  this->setPalette(pal);
+    QPalette pal = this->palette();
+    pal.setColor(QPalette::Background, Qt::red);
+    this->setPalette(pal);
 }
 
-void FindDialog::blinkFinished() {
-  disconnect(timerBlink, SIGNAL(finished()), this, SLOT(blinkFinished()));
-  QPalette pal = this->palette();
-  pal.setColor(QPalette::Background, originalBackColor);
-  this->setPalette(pal);
+void FindDialog::blinkFinished()
+{
+    disconnect(timerBlink, SIGNAL(finished()), this, SLOT(blinkFinished()));
+    QPalette pal = this->palette();
+    pal.setColor(QPalette::Background, originalBackColor);
+    this->setPalette(pal);
 }
 
-void FindDialog::closeEvent(QCloseEvent* event) {
+void FindDialog::closeEvent(QCloseEvent* event)
+{
     writeGeometry();
     event->accept();
 }
 
-void FindDialog::getSettings() {
-  QSettings settings;
-  if (settings.contains("Find/MatchCase"))
-    checkBox_Mc->setChecked(settings.value("Find/MatchCase").toBool());
+void FindDialog::getSettings()
+{
+    QSettings settings;
+    if (settings.contains("Find/MatchCase"))
+        checkBox_Mc->setChecked(settings.value("Find/MatchCase").toBool());
 
-  QPoint pos = settings.value("Find/Pos", QPoint(200, 200)).toPoint();
-  QSize size = settings.value("Find/Size", QSize(300, 100)).toSize();
-  resize(size);
-  move(pos);
+    QPoint pos = settings.value("Find/Pos", QPoint(200, 200)).toPoint();
+    QSize size = settings.value("Find/Size", QSize(300, 100)).toSize();
+    resize(size);
+    move(pos);
 }
 
-void FindDialog::writeGeometry() {
-  QSettings settings;
-  settings.setValue("Find/Pos", pos());
-  settings.setValue("Find/Size", size());
+void FindDialog::writeGeometry()
+{
+    QSettings settings;
+    settings.setValue("Find/Pos", pos());
+    settings.setValue("Find/Size", size());
 }
