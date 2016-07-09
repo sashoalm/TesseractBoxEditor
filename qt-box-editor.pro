@@ -52,11 +52,7 @@ HEADERS += src/MainWindow.h \
     dialogs/FindDialog.h \
     dialogs/DrawRectangle.h
 
-RESOURCES = resources/application.qrc \
-    resources/QBE-GNOME.qrc \
-    resources/QBE-Faenza.qrc \
-    resources/QBE-Oxygen.qrc \
-    resources/QBE-Tango.qrc
+RESOURCES = resources/application.qrc
 
 LIBS += -llept -ltesseract
 
