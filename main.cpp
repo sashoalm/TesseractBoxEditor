@@ -30,8 +30,8 @@
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    app.setOrganizationName("qt-box-editor");
-    app.setApplicationName("QT Box Editor");
+    app.setOrganizationName("CodeThesis");
+    app.setApplicationName("TesseractBoxEditor");
     app.setWindowIcon(QIcon(":/icons/qbe.png"));
 
     // For Qt4 there is this bug where Unicode string literals from the source

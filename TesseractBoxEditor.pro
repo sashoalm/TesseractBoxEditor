@@ -3,7 +3,7 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 VERSION = 1.13dev
-TARGET = qt-box-editor-$${VERSION}
+TARGET = TesseractBoxEditor
 TEMPLATE = app
 
 DEPENDPATH += ./ \
