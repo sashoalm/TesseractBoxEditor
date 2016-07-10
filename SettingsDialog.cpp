@@ -42,23 +42,6 @@ SettingsDialog::SettingsDialog(QWidget* parent, int tabIndex)
 
 SettingsDialog::~SettingsDialog() {}
 
-void SettingsDialog::on_fontButton_clicked()
-{
-    bool ok = false;
-
-    tableFont = QFontDialog::getFont(&ok, fontLabel->font(), this,
-                                     "Select font...");
-    if (ok) {
-        QFont tempFont = tableFont;
-        // Lets use reasonable font size ;-)
-        if (tableFont.pointSize() > 12)
-            tempFont.setPointSize(12);
-        fontLabel->setFont(tempFont);
-        fontLabel->setText(tableFont.family().toLocal8Bit() +
-                           tr(", %1 pt").arg(tableFont.pointSize()));
-    }
-}
-
 void SettingsDialog::on_fontImageButton_clicked()
 {
     bool ok = false;
@@ -104,29 +87,8 @@ void SettingsDialog::on_backgroundColorButton_clicked()
 void SettingsDialog::initSettings()
 {
     QSettings settings;
-    QString fontname = settings.value("GUI/Font").toString();
 
-    if (fontname.isEmpty()) {
-        tableFont.setFamily(TABLE_FONT);
-        tableFont.setPointSize(TABLE_FONT_SIZE);
-    } else {
-        tableFont = settings.value("GUI/Font").value<QFont>();
-    }
-
-    QString fontImageName = settings.value("GUI/ImageFont").toString();
-    if (fontImageName.isEmpty()) {
-        imageFont.setFamily(TABLE_FONT);
-        imageFont.setPointSize(TABLE_FONT_SIZE);
-    } else {
-        imageFont = settings.value("GUI/ImageFont").value<QFont>();
-    }
-
-    if (settings.contains("GUI/UseTheSameFont")) {
-        useSameFontCB->setChecked(settings.value("GUI/UseTheSameFont").toBool());
-        fontImageButton->setDisabled(useSameFontCB->isChecked());
-        fontImageLabel->setDisabled(useSameFontCB->isChecked());
-        fontImageLbl->setDisabled(useSameFontCB->isChecked());
-    }
+    imageFont = settings.value("GUI/ImageFont").value<QFont>();
 
     if (settings.contains("GUI/ImageFontOffset"))
         offsetSpinBox->setValue(settings.value("GUI/ImageFontOffset").toInt());
@@ -175,18 +137,7 @@ void SettingsDialog::initSettings()
     if (settings.contains("Text/Ligatures"))
         pteLigatures->setPlainText(settings.value("Text/Ligatures").toString());
 
-    QFont tempFont = tableFont;
-    // Lets use reasonable font size ;-)
-    if (tableFont.pointSize() > 12)
-        tempFont.setPointSize(12);
-    fontLabel->setFont(tempFont);
-    fontLabel->setText(tableFont.family().toLocal8Bit() +
-                       tr(", %1 pt").arg(tableFont.pointSize()));
-
-    tempFont = imageFont;
-    if (imageFont.pointSize() > 12)
-        tempFont.setPointSize(12);
-    fontImageLabel->setFont(tempFont);
+    fontImageLabel->setFont(imageFont);
     fontImageLabel->setText(imageFont.family().toLocal8Bit() +
                             tr(", %1 pt").arg(imageFont.pointSize()));
 
@@ -206,9 +157,7 @@ void SettingsDialog::saveSettings()
 {
     QSettings settings;
 
-    settings.setValue("GUI/Font", tableFont);
     settings.setValue("GUI/ImageFont", imageFont);
-    settings.setValue("GUI/UseTheSameFont", useSameFontCB->isChecked());
     settings.setValue("GUI/ImageFontOffset", offsetSpinBox->value());
     settings.setValue("GUI/BalloonCount", ballonsSpinBox->value());
 

@@ -186,7 +186,6 @@ public:
     bool qCreateBoxes(const QString &boxFileName);
     bool makeBoxPage();
     void binarizeImage();
-    void setSelectionRect();
     void setBolded(bool v);
     void setItalic(bool v);
     void setUnderline(bool v);

@@ -26,7 +26,5 @@
 #define UPDATE_URL "https://raw.github.com/zdenop/qt-box-editor/master/CURRENT_VERSION"
 #define PROJECT_URL "http://github.com/zdenop/qt-box-editor"
 #define PROJECT_URL_NAME "github.com/zdenop/qt-box-editor"
-#define TABLE_FONT "Arial"
-#define TABLE_FONT_SIZE 12
 
 #endif  // SRC_INCLUDE_SETTINGS_H_

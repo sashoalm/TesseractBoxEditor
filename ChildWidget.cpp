@@ -337,7 +337,6 @@ ChildWidget::ChildWidget(QWidget* parent)
     connect(this, SIGNAL(splitterMoved(int, int)), this,
             SLOT(updateColWidthsOnSplitter(int, int)));
 
-    setSelectionRect();
     widgetWidth = parent->size().width();
     imageItem = NULL;
     modified = false;
@@ -424,26 +423,9 @@ void ChildWidget::readSettings()
     if (DMESS > 10) qDebug() << Q_FUNC_INFO;
     // Font for table
     QSettings settings;
-    QFont tableFont = settings.value("GUI/Font").value<QFont>();
-
-    if (tableFont.family().isEmpty()) {
-        tableFont.setFamily(TABLE_FONT);
-        tableFont.setPointSize(TABLE_FONT_SIZE);
-    }
-    table->setFont(tableFont);
 
     // Font for Image/balloons
-    if (settings.contains("GUI/UseTheSameFont") &&
-            settings.value("GUI/UseTheSameFont").toBool()) {
-        m_imageFont = tableFont;
-    } else {
-        m_imageFont = settings.value("GUI/ImageFont").value<QFont>();
-        if (m_imageFont.family().isEmpty()) {
-            m_imageFont.setFamily(TABLE_FONT);
-            m_imageFont.setPointSize(TABLE_FONT_SIZE);
-        }
-    }
-    m_imageFont.setPointSize(2 * m_imageFont.pointSize());
+    m_imageFont = settings.value("GUI/ImageFont", font()).value<QFont>();
 
     if (settings.contains("GUI/ImageFontOffset")) {
         fontOffset = settings.value("GUI/ImageFontOffset").toInt();
@@ -1517,20 +1499,6 @@ QImage ChildWidget::gItem2qImage()
     imageItem->paint(&painter, &styleOption);
     painter.end();
     return image;
-}
-
-void ChildWidget::setSelectionRect()
-{
-    if (DMESS > 10) qDebug() << Q_FUNC_INFO;
-    QSettings settings;
-    QFont imageFont = settings.value("GUI/ImageFont").value<QFont>();
-
-    if (imageFont.family().isEmpty()) {
-        imageFont.setFamily(TABLE_FONT);
-        imageFont.setPointSize(TABLE_FONT_SIZE);
-    }
-
-    imageFont.setPointSize((imageFont.pointSize() * 2));
 }
 
 void ChildWidget::setZoomStatus()

@@ -47,7 +47,6 @@ signals:
     void settingsChanged();
 
 private slots:
-    void on_fontButton_clicked();
     void on_fontImageButton_clicked();
     void on_imageFontColorButton_clicked();
     void on_colorRectButton_clicked();
@@ -64,7 +63,6 @@ private:
     void chooseColor(QPushButton* button, QColor* color);
     void updateColorButton(QPushButton* button, const QColor& color);
 
-    QFont tableFont;
     QFont imageFont;
     QColor imageFontColor;
     QColor rectColor;
