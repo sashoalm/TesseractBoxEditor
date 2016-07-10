@@ -591,62 +591,6 @@ void MainWindow::getBinImage()
     }
 }
 
-void MainWindow::checkForUpdate()
-{
-    statusBar()->showMessage(tr("Checking for new version..."), 2000);
-
-    QNetworkRequest request;
-    request.setUrl(QUrl(UPDATE_URL));
-
-    // TODO(zdenop): test for proxy, ask auth.
-    QNetworkAccessManager* manager = new QNetworkAccessManager();
-    QNetworkReply* reply = manager->get(request);
-
-    QEventLoop* loop = new QEventLoop;
-
-    QObject::connect(manager, SIGNAL(finished(QNetworkReply*)),
-                     loop, SLOT(quit()));
-    loop->exec();
-
-    checkVersion(reply);
-    delete manager;
-}
-
-void MainWindow::requestFinished(QNetworkReply* reply)
-{
-    checkVersion(reply);
-}
-
-void MainWindow::checkVersion(QNetworkReply* reply)
-{
-    if (reply->error() == QNetworkReply::NoError) {
-        QString current_version = reply->readAll().trimmed();
-        QString app_version = QString("%1").arg(VERSION).replace("dev", "",
-                              Qt::CaseInsensitive);
-        QString messageText;
-
-        if (app_version == current_version) {
-            messageText = tr("<p>No newer version is available.</p>");
-        } else if (app_version > current_version) {
-            messageText = tr("<p>Your version ('%1') is higher than ").arg(VERSION);
-            messageText += tr("released stable version ('%2').").arg(current_version);
-            messageText += tr("</p><p>Do you use develepment version? ");
-            messageText += tr("Don't forget to install stable version manually!</p>");
-        } else {
-            messageText = tr("<p>New version '%1' is available!<br/>Please visit ")
-                          .arg(current_version);
-            messageText +=
-                tr("<a href=%1/downloads>downloads on project homepage!</a></p>")
-                .arg(PROJECT_URL);
-        }
-
-        QMessageBox::information(this, tr("Version info"), messageText);
-    } else {
-        QMessageBox::critical(this, tr("Network"),
-                              tr("ERROR: %1").arg(reply->errorString()));
-    }
-}
-
 void MainWindow::shortCutList()
 {
     if (!shortCutsDialog)
@@ -661,8 +605,6 @@ void MainWindow::about()
 
     abouttext.append(tr("<p><a href=\"http://qt-project.org/\">QT</a> "));
     abouttext.append(tr("editor of tesseract-ocr box files</p>"));
-    abouttext.append(tr("<p>Project page: <a href=%1>%2</a></p>").
-                     arg(PROJECT_URL).arg(PROJECT_URL_NAME));
     abouttext.append(tr("<p>Copyright 2010 Marcel Kolodziejczyk<br/>"));
     abouttext.append(tr("Copyright 2012 Zohar Gofer<br/>"));
     abouttext.append(tr("Copyright 2012 Dmitri Silaev<br/>"));
@@ -1078,11 +1020,6 @@ void MainWindow::createActions()
                                "tesseract-ocr training."));
     connect(getBinAct, SIGNAL(triggered()), this, SLOT(getBinImage()));
 
-    checkForUpdateAct = new QAction(tr("&Check for update"), this);
-    checkForUpdateAct->setToolTip(tr("Check whether a newer version exits."));
-    checkForUpdateAct->setStatusTip(tr("Check whether a newer version exits."));
-    connect(checkForUpdateAct, SIGNAL(triggered()), this, SLOT(checkForUpdate()));
-
     aboutAct = new QAction(tr("&About"), this);
     aboutAct->setToolTip(tr("Show the application's About box"));
     aboutAct->setStatusTip(tr("Show the application's About box"));
@@ -1165,8 +1102,6 @@ void MainWindow::createMenus()
     menuBar()->addSeparator();
 
     helpMenu = menuBar()->addMenu(tr("&Help"));
-    helpMenu->addAction(checkForUpdateAct);
-    helpMenu->addSeparator();
     helpMenu->addAction(shortCutListAct);
     helpMenu->addAction(aboutAct);
     helpMenu->addAction(aboutQtAct);

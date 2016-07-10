@@ -28,7 +28,6 @@
 #include <leptonica/allheaders.h>
 
 #include "ChildWidget.h"
-#include "Settings.h"
 #include "DelegateEditors.h"
 #include "TessTools.h"
 #include "SettingsDialog.h"

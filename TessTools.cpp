@@ -22,7 +22,6 @@
 
 #include <locale.h>
 #include "TessTools.h"
-#include "Settings.h"
 
 #ifdef TESSERACT_VERSION  // 3.03 API
 #include <tesseract/renderer.h>

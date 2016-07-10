@@ -1,4 +1,4 @@
-QT       += core gui network
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -32,7 +32,6 @@ SOURCES += main.cpp \
 
 HEADERS += MainWindow.h \
     ChildWidget.h \
-    Settings.h \
     TessTools.h \
     DelegateEditors.h \
     SettingsDialog.h \

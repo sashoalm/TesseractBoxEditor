@@ -44,13 +44,8 @@
 #include <QStyle>
 #include <QStyleFactory>
 #include <QToolBar>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-
 
 #include "ChildWidget.h"
-#include "Settings.h"
 #include "SettingsDialog.h"
 
 class ChildWidget;
@@ -63,17 +58,12 @@ class ShortCutsDialog;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    QNetworkAccessManager manager;
 
 public:
     MainWindow();
 
     void addChild(const QString& imageFileName);
     SettingsDialog* runSettingsDialog;
-
-public slots:
-    void checkForUpdate();
-    void requestFinished(QNetworkReply* reply);
 
 protected:
     void dragEnterEvent(QDragEnterEvent* event);
@@ -147,7 +137,6 @@ private:
     void createStatusBar();
     void readSettings(bool init);
     void writeSettings();
-    void checkVersion(QNetworkReply* reply);
     void updateRecentFileActions();
 
     QTabWidget* tabWidget;
@@ -221,7 +210,6 @@ private:
     QAction* redoAct;
     QAction* genBoxAct;
     QAction* getBinAct;
-    QAction* checkForUpdateAct;
     QAction* shortCutListAct;
     QAction* aboutAct;
     QAction* aboutQtAct;

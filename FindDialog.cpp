@@ -21,7 +21,6 @@
 **********************************************************************/
 
 #include "FindDialog.h"
-#include "Settings.h"
 #include <unistd.h>
 #include <QDebug>
 
