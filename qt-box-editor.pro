@@ -13,32 +13,33 @@ DEPENDPATH += ./ \
 DEFINES += VERSION=\\\"$${VERSION}\\\"
 
 FORMS += \
-    ShortCutDialog.ui \
-    GetRowIDDialog.ui \
-    SettingsDialog.ui \
-    FindDialog.ui \
-    DrawRectangle.ui
+    drawrectangle.ui \
+    finddialog.ui \
+    getrowiddialog.ui \
+    settingsdialog.ui \
+    shortcutdialog.ui
 
 SOURCES += main.cpp \
-    MainWindow.cpp \
-    ChildWidget.cpp \
-    DelegateEditors.cpp \
-    TessTools.cpp \
-    SettingsDialog.cpp \
-    GetRowIDDialog.cpp \
-    ShortCutsDialog.cpp \
-    FindDialog.cpp \
-    DrawRectangle.cpp
+    childwidget.cpp \
+    delegateeditors.cpp \
+    drawrectangle.cpp \
+    finddialog.cpp \
+    getrowiddialog.cpp \
+    mainwindow.cpp \
+    settingsdialog.cpp \
+    shortcutsdialog.cpp \
+    tesstools.cpp
 
-HEADERS += MainWindow.h \
-    ChildWidget.h \
-    TessTools.h \
-    DelegateEditors.h \
-    SettingsDialog.h \
-    GetRowIDDialog.h \
-    ShortCutsDialog.h \
-    FindDialog.h \
-    DrawRectangle.h
+HEADERS += \
+    childwidget.h \
+    delegateeditors.h \
+    drawrectangle.h \
+    finddialog.h \
+    getrowiddialog.h \
+    mainwindow.h \
+    settingsdialog.h \
+    shortcutsdialog.h \
+    tesstools.h
 
 RESOURCES = resources/application.qrc
 

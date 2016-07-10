@@ -45,8 +45,8 @@
 #include <QStyleFactory>
 #include <QToolBar>
 
-#include "ChildWidget.h"
-#include "SettingsDialog.h"
+#include "childwidget.h"
+#include "settingsdialog.h"
 
 class ChildWidget;
 class QAction;

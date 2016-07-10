@@ -20,8 +20,8 @@
 *
 **********************************************************************/
 
-#include "DrawRectangle.h"
-#include "ui_DrawRectangle.h"
+#include "drawrectangle.h"
+#include "ui_drawrectangle.h"
 
 //http://qt.gitorious.org/qt-labs/qtspotify/blobs/b7b0ecae6f5ab815e941bd62c00b0f87d2810016/logindialog.cpp
 DrawRectangle::DrawRectangle(QWidget* parent, QString title, int maxWidth,

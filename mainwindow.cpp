@@ -22,8 +22,8 @@
 *
 **********************************************************************/
 
-#include "MainWindow.h"
-#include "ShortCutsDialog.h"
+#include "mainwindow.h"
+#include "shortcutsdialog.h"
 
 MainWindow::MainWindow()
 {

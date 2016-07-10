@@ -27,13 +27,13 @@
 #include <algorithm>
 #include <leptonica/allheaders.h>
 
-#include "ChildWidget.h"
-#include "DelegateEditors.h"
-#include "TessTools.h"
-#include "SettingsDialog.h"
-#include "GetRowIDDialog.h"
-#include "FindDialog.h"
-#include "DrawRectangle.h"
+#include "childwidget.h"
+#include "delegateeditors.h"
+#include "tesstools.h"
+#include "settingsdialog.h"
+#include "getrowiddialog.h"
+#include "finddialog.h"
+#include "drawrectangle.h"
 
 // This allows storing QGraphicsRectItem's in table model data
 Q_DECLARE_METATYPE(QGraphicsRectItem*)

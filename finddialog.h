@@ -29,7 +29,7 @@
 #include <QDialog>
 #include <QTimeLine>
 
-#include "ui_FindDialog.h"
+#include "ui_finddialog.h"
 
 class FindDialog : public QDialog, public Ui::Find
 {

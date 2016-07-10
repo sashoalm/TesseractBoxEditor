@@ -27,7 +27,7 @@
 #include <QDialog>
 #include <QPushButton>
 
-#include "ui_GetRowIDDialog.h"
+#include "ui_getrowiddialog.h"
 
 class GetRowIDDialog : public QDialog, public Ui::GetRowIDDialog
 {

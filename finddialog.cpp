@@ -20,7 +20,7 @@
 *
 **********************************************************************/
 
-#include "FindDialog.h"
+#include "finddialog.h"
 #include <unistd.h>
 #include <QDebug>
 

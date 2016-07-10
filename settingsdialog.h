@@ -31,7 +31,7 @@
 #include <QSortFilterProxyModel>
 #include <QDebug>
 
-#include "ui_SettingsDialog.h"
+#include "ui_settingsdialog.h"
 
 class SettingsDialog : public QDialog, public Ui::SettingsDialog
 {

@@ -25,7 +25,7 @@
 
 #include <tesseract/baseapi.h>
 #include <leptonica/allheaders.h>
-#include "TessTools.h"
+#include "tesstools.h"
 #include <QString>
 #include <QImage>
 

@@ -1,8 +1,8 @@
 /**********************************************************************
-* File:        ShortCutsDialog.h
-* Description: Dialog for shorcuts
+* File:        GetRowIDDialog.cpp
+* Description: Get Row ID Dialog
 * Author:      Zdenko Podobny
-* Created:     2011-03-21
+* Created:     2011-04-14
 *
 * (C) Copyright 2011, Zdenko Podobny
 **
@@ -20,18 +20,24 @@
 *
 **********************************************************************/
 
-#ifndef DIALOGS_SHORTCUTSDIALOG_H_
-#define DIALOGS_SHORTCUTSDIALOG_H_
+#include "getrowiddialog.h"
 
-#include <QDialog>
-#include "ui_ShortCutDialog.h"
-
-class ShortCutsDialog : public QDialog, public Ui::ShortCutDialog
+GetRowIDDialog::GetRowIDDialog(QWidget* parent)
+    : QDialog(parent)
 {
-    Q_OBJECT
+    setupUi(this);
+    buttonBox->button(QDialogButtonBox::Ok)->setEnabled(false);
 
-public:
-    explicit ShortCutsDialog(QWidget* = 0);
-};
+    QRegExp regExp("^\\d\\d*$");
+    lineEdit->setValidator(new QRegExpValidator(regExp, this));
 
-#endif  // DIALOGS_SHORTCUTSDIALOG_H_
+    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+}
+
+void GetRowIDDialog::on_lineEdit_textChanged()
+{
+    buttonBox->button(QDialogButtonBox::Ok)->setEnabled(
+        lineEdit->hasAcceptableInput());
+}
+
